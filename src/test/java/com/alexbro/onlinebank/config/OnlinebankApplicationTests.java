@@ -1,4 +1,4 @@
-package com.alexbro.onlinebank;
+package com.alexbro.onlinebank.config;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
