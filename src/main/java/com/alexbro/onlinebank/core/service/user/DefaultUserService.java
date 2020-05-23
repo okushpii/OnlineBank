@@ -14,7 +14,12 @@ public class DefaultUserService implements UserService{
     private UserDao userDao;
 
     @Override
-    public Optional<User> getUserByUsername(String username) {
-        return userDao.getUserByLogin(username);
+    public Optional<User> getByUsername(String username) {
+        return userDao.getByUsername(username);
+    }
+
+    @Override
+    public Optional<User> getByCode(String code) {
+        return userDao.getByCode(code);
     }
 }

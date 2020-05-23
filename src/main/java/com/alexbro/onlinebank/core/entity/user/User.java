@@ -1,10 +1,10 @@
 package com.alexbro.onlinebank.core.entity.user;
 
 import com.alexbro.onlinebank.core.entity.common.IndexedEntity;
+import com.alexbro.onlinebank.core.entity.account.Account;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -21,6 +21,10 @@ public class User extends IndexedEntity {
 
     @Column
     private String username;
+
+    @Column
+    @OneToMany
+    private List<Account> accounts;
 
     public String getName() {
         return name;
@@ -52,5 +56,13 @@ public class User extends IndexedEntity {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
     }
 }

@@ -18,6 +18,7 @@ import static org.mockito.Mockito.when;
 public class DefaultUserServiceTest {
 
     private static final String USER_LOGIN = "login";
+    private static final String USER_CODE = "u1";
 
     @InjectMocks
     private DefaultUserService testedEntry;
@@ -30,10 +31,19 @@ public class DefaultUserServiceTest {
 
     @Test
     public void shouldGetUserByLogin(){
-        when(userDao.getUserByLogin(USER_LOGIN)).thenReturn(Optional.of(user));
-        Optional<User> result = testedEntry.getUserByUsername(USER_LOGIN);
+        when(userDao.getByUsername(USER_LOGIN)).thenReturn(Optional.of(user));
+
+        Optional<User> result = testedEntry.getByUsername(USER_LOGIN);
 
         assertEquals(Optional.of(user), result);
     }
 
+    @Test
+    public void shouldGetUserById(){
+        when(userDao.getByCode(USER_CODE)).thenReturn(Optional.of(user));
+
+        Optional<User> result = testedEntry.getByCode(USER_CODE);
+
+        assertEquals(Optional.of(user), result);
+    }
 }

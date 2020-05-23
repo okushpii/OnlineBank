@@ -15,7 +15,7 @@ public class WebContext implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authorizationInterceptor).addPathPatterns("/user");
+        registry.addInterceptor(authorizationInterceptor).addPathPatterns("/user/**");
     }
 
 }

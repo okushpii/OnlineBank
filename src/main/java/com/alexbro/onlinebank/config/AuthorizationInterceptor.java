@@ -1,7 +1,7 @@
 package com.alexbro.onlinebank.config;
 
-import com.alexbro.onlinebank.facade.authentication.data.AuthenticationData;
-import com.alexbro.onlinebank.facade.authentication.facade.AuthorizationFacade;
+import com.alexbro.onlinebank.facade.data.auth.AuthData;
+import com.alexbro.onlinebank.facade.auth.AuthFacade;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -14,15 +14,15 @@ import java.io.IOException;
 public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
 
     @Resource
-    private AuthorizationFacade authorizationFacade;
+    private AuthFacade authFacade;
 
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
 
-        AuthenticationData authData = (AuthenticationData) request.getSession().getAttribute("auth-data");
+        AuthData authData = (AuthData) request.getSession().getAttribute("authData");
 
-        if (!authorizationFacade.isAuthorized(authData)){
+        if (!authFacade.isAuthorized(authData)){
             sendRedirect(response);
             return false;
         }
