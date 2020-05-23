@@ -1,9 +1,9 @@
 package com.alexbro.onlinebank.controller;
 
 import com.alexbro.onlinebank.core.exception.LoginException;
-import com.alexbro.onlinebank.facade.authentication.data.AuthorizationRequest;
-import com.alexbro.onlinebank.facade.authentication.data.AuthenticationData;
-import com.alexbro.onlinebank.facade.authentication.facade.AuthorizationFacade;
+import com.alexbro.onlinebank.facade.data.auth.AuthorizationRequest;
+import com.alexbro.onlinebank.facade.data.auth.AuthData;
+import com.alexbro.onlinebank.facade.auth.AuthFacade;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,8 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -26,15 +24,14 @@ public class LoginPageControllerTest {
 
     private static final String USER_NAME = "alex123";
     private static final String USER_PASSWORD = "12345";
-    private static final String AUTHENTICATION_TOKEN = "13213njhj";
-    private static final String LOGIN_PAGE = "loginPage";
+    private static final String LOGIN_PAGE = "pages/loginPage";
     private static final String ERROR_MESSAGE = "User is not found by this login and password!";
 
     @InjectMocks
     private LoginPageController testedEntry;
 
     @Mock
-    private AuthorizationFacade authorizationFacade;
+    private AuthFacade authFacade;
     @Mock
     private HttpServletRequest request;
     @Mock
@@ -42,7 +39,7 @@ public class LoginPageControllerTest {
     @Mock
     private Model model;
     @Mock
-    private AuthenticationData authenticationData;
+    private AuthData authData;
     @Mock
     private AuthorizationRequest authorizationRequest;
 
@@ -55,16 +52,16 @@ public class LoginPageControllerTest {
 
     @Test
     public void shouldAuthorise(){
-        when(authorizationFacade.authorize(USER_NAME, USER_PASSWORD)).thenReturn(authenticationData);
+        when(authFacade.authorize(USER_NAME, USER_PASSWORD)).thenReturn(authData);
 
         testedEntry.authorize(authorizationRequest, request, model);
 
-        verify(session).setAttribute("auth-data", authenticationData);
+        verify(session).setAttribute("authData", authData);
     }
 
     @Test
     public void shouldReturnLoginPage(){
-        when(authorizationFacade.authorize(USER_NAME, USER_PASSWORD)).thenThrow( new LoginException(ERROR_MESSAGE));
+        when(authFacade.authorize(USER_NAME, USER_PASSWORD)).thenThrow( new LoginException(ERROR_MESSAGE));
 
         testedEntry.authorize(authorizationRequest, request, model);
 

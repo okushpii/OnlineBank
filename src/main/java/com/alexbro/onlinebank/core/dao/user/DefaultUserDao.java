@@ -12,15 +12,21 @@ import java.util.Optional;
 public class DefaultUserDao implements UserDao{
 
     private static final String GET_USER_BY_USERNAME_QUERY ="SELECT u FROM User u WHERE u.username = :username";
+    private static final String GET_USER_BY_ID_QUERY ="SELECT u FROM User u WHERE u.code = :code";
 
     @Resource
     private SessionProvider sessionProvider;
 
     @Transactional
     @Override
-    public Optional<User> getUserByLogin(String username) {
+    public Optional<User> getByUsername(String username) {
         return sessionProvider.getSession().createQuery(GET_USER_BY_USERNAME_QUERY, User.class).setParameter("username", username).
                 uniqueResultOptional();
     }
 
+    @Override
+    public Optional<User> getByCode(String code) {
+        return sessionProvider.getSession().createQuery(GET_USER_BY_ID_QUERY, User.class).setParameter("code", code).
+                uniqueResultOptional();
+    }
 }

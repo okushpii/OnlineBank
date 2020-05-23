@@ -1,7 +1,7 @@
 package com.alexbro.onlinebank.config;
 
-import com.alexbro.onlinebank.facade.authentication.data.AuthenticationData;
-import com.alexbro.onlinebank.facade.authentication.facade.AuthorizationFacade;
+import com.alexbro.onlinebank.facade.data.auth.AuthData;
+import com.alexbro.onlinebank.facade.auth.AuthFacade;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +24,7 @@ public class AuthorizationInterceptorTest {
     private AuthorizationInterceptor testedEntry;
 
     @Mock
-    private AuthorizationFacade authorizationFacade;
+    private AuthFacade authFacade;
 
     @Mock
     private HttpServletRequest request;
@@ -39,26 +39,26 @@ public class AuthorizationInterceptorTest {
     private HttpSession session;
 
     @Mock
-    private AuthenticationData authenticationData;
+    private AuthData authData;
 
     @Before
     public void setUp(){
         when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("auth-data")).thenReturn(authenticationData);
+        when(session.getAttribute("authData")).thenReturn(authData);
     }
 
     @Test
     public void shouldPreHandleWhenUserIsAuthorised()throws Exception{
-        when(authorizationFacade.isAuthorized(authenticationData)).thenReturn(true);
+        when(authFacade.isAuthorized(authData)).thenReturn(true);
         when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("auth-data")).thenReturn(authenticationData);
+        when(session.getAttribute("authData")).thenReturn(authData);
 
         assertTrue(testedEntry.preHandle(request, response, handler));
     }
 
     @Test
     public void shouldPreHandleWhenUserIsNotAuthorised()throws Exception{
-        when(authorizationFacade.isAuthorized(authenticationData)).thenReturn(false);
+        when(authFacade.isAuthorized(authData)).thenReturn(false);
 
         assertFalse(testedEntry.preHandle(request, response, handler));
     }
