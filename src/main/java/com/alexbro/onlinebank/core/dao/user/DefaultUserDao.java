@@ -1,7 +1,7 @@
 package com.alexbro.onlinebank.core.dao.user;
 
-import com.alexbro.onlinebank.core.dao.common.util.SessionProvider;
-import com.alexbro.onlinebank.core.entity.user.User;
+import com.alexbro.onlinebank.core.dao.util.SessionProvider;
+import com.alexbro.onlinebank.core.entity.User;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;

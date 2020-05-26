@@ -1,6 +1,6 @@
 package com.alexbro.onlinebank.facade.user;
 
-import com.alexbro.onlinebank.core.entity.user.User;
+import com.alexbro.onlinebank.core.entity.User;
 import com.alexbro.onlinebank.core.service.user.UserService;
 import com.alexbro.onlinebank.facade.converter.utill.Converter;
 import com.alexbro.onlinebank.facade.data.user.UserData;

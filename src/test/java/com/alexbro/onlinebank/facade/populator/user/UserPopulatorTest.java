@@ -1,7 +1,7 @@
 package com.alexbro.onlinebank.facade.populator.user;
 
-import com.alexbro.onlinebank.core.entity.account.Account;
-import com.alexbro.onlinebank.core.entity.user.User;
+import com.alexbro.onlinebank.core.entity.Account;
+import com.alexbro.onlinebank.core.entity.User;
 import com.alexbro.onlinebank.facade.data.user.UserData;
 import org.junit.Test;
 import org.junit.runner.RunWith;

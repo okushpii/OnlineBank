@@ -1,7 +1,8 @@
 package com.alexbro.onlinebank.facade.data.factory;
 
-import com.alexbro.onlinebank.core.entity.user.User;
-import com.alexbro.onlinebank.facade.data.auth.AuthData;
+import com.alexbro.onlinebank.auth.facade.data.factory.DefaultAuthDataFactory;
+import com.alexbro.onlinebank.core.entity.User;
+import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

@@ -2,7 +2,7 @@ package com.alexbro.onlinebank.core.user.service;
 
 import com.alexbro.onlinebank.core.service.user.DefaultUserService;
 import com.alexbro.onlinebank.core.dao.user.UserDao;
-import com.alexbro.onlinebank.core.entity.user.User;
+import com.alexbro.onlinebank.core.entity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
