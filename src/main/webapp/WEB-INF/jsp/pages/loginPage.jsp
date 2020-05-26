@@ -5,9 +5,7 @@
 <html>
 <%@include file="/WEB-INF/jsp/fragments/head.jsp" %>
 <%@include file="/WEB-INF/jsp/fragments/header.jsp" %>
-<form:form method="post" action="/login" modelAttribute="authorizationRequest">
 <%@include file="/WEB-INF/jsp/fragments/loginForm.jsp"%>
-</form:form>
 <body>
 </body>
 </html>

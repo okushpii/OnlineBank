@@ -1,6 +1,6 @@
 package com.alexbro.onlinebank.facade.data.user;
 
-import com.alexbro.onlinebank.core.entity.account.Account;
+import com.alexbro.onlinebank.core.entity.Account;
 
 import java.util.List;
 

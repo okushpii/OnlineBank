@@ -1,6 +1,6 @@
 package com.alexbro.onlinebank.facade.converter.user;
 
-import com.alexbro.onlinebank.core.entity.user.User;
+import com.alexbro.onlinebank.core.entity.User;
 import com.alexbro.onlinebank.facade.data.user.UserData;
 import com.alexbro.onlinebank.facade.populator.util.Populator;
 import org.junit.Test;

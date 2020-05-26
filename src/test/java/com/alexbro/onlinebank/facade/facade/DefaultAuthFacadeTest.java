@@ -1,13 +1,13 @@
 package com.alexbro.onlinebank.facade.facade;
 
-import com.alexbro.onlinebank.core.entity.user.User;
-import com.alexbro.onlinebank.core.service.authentication.AuthenticationService;
+import com.alexbro.onlinebank.core.entity.User;
+import com.alexbro.onlinebank.auth.model.service.AuthService;
 import com.alexbro.onlinebank.core.service.encode.password.EncodePasswordService;
 import com.alexbro.onlinebank.core.service.user.UserService;
-import com.alexbro.onlinebank.core.service.encode.token.AuthenticationTokenService;
-import com.alexbro.onlinebank.facade.data.auth.AuthData;
-import com.alexbro.onlinebank.facade.data.factory.AuthDataFactory;
-import com.alexbro.onlinebank.facade.auth.DefaultAuthFacade;
+import com.alexbro.onlinebank.auth.model.service.AuthTokenService;
+import com.alexbro.onlinebank.auth.facade.data.AuthData;
+import com.alexbro.onlinebank.auth.facade.data.factory.AuthDataFactory;
+import com.alexbro.onlinebank.auth.facade.DefaultAuthFacade;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,9 +37,9 @@ public class DefaultAuthFacadeTest {
     @Mock
     private UserService userService;
     @Mock
-    private AuthenticationService authenticationService;
+    private AuthService authService;
     @Mock
-    private AuthenticationTokenService authenticationTokenService;
+    private AuthTokenService authTokenService;
     @Mock
     private AuthDataFactory authDataFactory;
     @Mock
@@ -56,14 +56,14 @@ public class DefaultAuthFacadeTest {
         when(authData.getUsername()).thenReturn(USER_NAME);
         when(authData.getToken()).thenReturn(AUTHENTICATION_TOKEN);
         when(encodePasswordService.encodePassword(NOT_ENCODED_USER_PASSWORD)).thenReturn(ENCODED_USER_PASSWORD);
-        when(authenticationTokenService.generateToken(USER_NAME, ENCODED_USER_PASSWORD)).thenReturn(AUTHENTICATION_TOKEN);
+        when(authTokenService.generateToken(USER_NAME, ENCODED_USER_PASSWORD)).thenReturn(AUTHENTICATION_TOKEN);
         when(authDataFactory.create(user, AUTHENTICATION_TOKEN)).thenReturn(authData);
         when(userService.getByUsername(USER_NAME)).thenReturn(Optional.of(user));
     }
 
     @Test
     public void shouldAuthoriseWhenUserIsPresent() {
-        when(authenticationService.passwordMatches(ENCODED_USER_PASSWORD, ENCODED_USER_PASSWORD)).thenReturn(true);
+        when(authService.passwordMatches(ENCODED_USER_PASSWORD, ENCODED_USER_PASSWORD)).thenReturn(true);
 
         AuthData result = testedEntry.authorize(USER_NAME, NOT_ENCODED_USER_PASSWORD);
 
