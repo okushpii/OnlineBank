@@ -1,5 +1,6 @@
 package com.alexbro.onlinebank.auth.view;
 
+import com.alexbro.onlinebank.auth.AuthConstants;
 import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.auth.facade.AuthFacade;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -11,9 +12,9 @@ public class AuthTag extends RequestContextAwareTag {
     protected int doStartTagInternal() {
         AuthFacade authFacade = (AuthFacade) WebApplicationContextUtils
                 .getRequiredWebApplicationContext(pageContext.getServletContext())
-                .getBean("authFacade");
+                .getBean(AuthConstants.AUTH_FACADE);
 
-        AuthData authData = (AuthData) pageContext.getSession().getAttribute("authData");
+        AuthData authData = (AuthData) pageContext.getSession().getAttribute(AuthConstants.AUTH_DATA_ATTRIBUTE);
         if (authFacade.isAuthorized(authData)) {
             return EVAL_BODY_INCLUDE;
         }
