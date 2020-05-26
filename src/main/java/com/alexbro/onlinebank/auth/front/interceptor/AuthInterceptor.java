@@ -1,5 +1,7 @@
 package com.alexbro.onlinebank.auth.front.interceptor;
 
+import com.alexbro.onlinebank.WebConstants;
+import com.alexbro.onlinebank.auth.AuthConstants;
 import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.auth.facade.AuthFacade;
 import org.springframework.stereotype.Component;
@@ -20,7 +22,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
 
-        AuthData authData = (AuthData) request.getSession().getAttribute("authData");
+        AuthData authData = (AuthData) request.getSession().getAttribute(AuthConstants.AUTH_DATA_ATTRIBUTE);
 
         if (!authFacade.isAuthorized(authData)){
             sendRedirect(response);
@@ -32,7 +34,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
     private void sendRedirect(HttpServletResponse response){
         try {
-            response.sendRedirect("/login");
+            response.sendRedirect(WebConstants.Mapping.LOGIN_PAGE_MAPPING);
         } catch (IOException e) {
             e.printStackTrace();
         }
