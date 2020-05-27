@@ -16,13 +16,13 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-@RequestMapping(WebConstants.Mapping.AUTH)
 public class AuthController {
 
     @Resource
     private AuthFacade authFacade;
 
     @PostMapping
+    @RequestMapping(WebConstants.Mapping.AUTH)
     public String authorize(@ModelAttribute AuthRequest authRequest,
                             HttpServletRequest request, Model model) {
         try {
@@ -34,5 +34,12 @@ public class AuthController {
             model.addAttribute("error" , AuthConstants.ERROR_MESSAGE);
             return WebConstants.Pages.LOGIN;
         }
+    }
+
+    @PostMapping
+    @RequestMapping(WebConstants.Mapping.LOGOUT)
+    public String logout(HttpServletRequest request){
+        request.getSession().removeAttribute(WebConstants.SessionAttributes.AUTH_DATA);
+        return WebConstants.Util.REDIRECT + WebConstants.Mapping.LOGIN;
     }
 }

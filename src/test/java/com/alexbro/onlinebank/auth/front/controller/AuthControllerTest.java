@@ -26,6 +26,8 @@ public class AuthControllerTest {
     private static final String USER_PASSWORD = "12345";
     private static final String LOGIN_PAGE = "pages/loginPage";
     private static final String ERROR_MESSAGE = "User is not found by this login and password!";
+    private static final String AUTH_DATA = "authData";
+    private static final String LOGIN_REDIRECT = "redirect:/login";
 
     @InjectMocks
     private AuthController testedEntry;
@@ -56,19 +58,24 @@ public class AuthControllerTest {
 
         testedEntry.authorize(authRequest, request, model);
 
-        verify(session).setAttribute("authData", authData);
+        verify(session).setAttribute(AUTH_DATA, authData);
     }
 
     @Test
     public void shouldReturnLoginPage(){
         when(authFacade.authorize(USER_NAME, USER_PASSWORD)).thenThrow( new AuthException(ERROR_MESSAGE));
 
-        testedEntry.authorize(authRequest, request, model);
-
-        verify(model).addAttribute("error", ERROR_MESSAGE);
-
         String result = testedEntry.authorize(authRequest, request, model);
 
+        verify(model).addAttribute("error", ERROR_MESSAGE);
         assertEquals(LOGIN_PAGE, result);
+    }
+
+    @Test
+    public void shouldLogOut(){
+        String result =  testedEntry.logout(request);
+
+        verify(session).removeAttribute(AUTH_DATA);
+        assertEquals(LOGIN_REDIRECT, result);
     }
 }
