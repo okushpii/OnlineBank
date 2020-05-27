@@ -7,6 +7,7 @@ public interface WebConstants {
         String LOGIN = "/login";
         String USER = "/user";
         String AUTH = "/auth";
+        String LOGOUT = "/logout";
     }
 
     interface RequestAttributes{

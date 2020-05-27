@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="auth" uri="/WEB-INF/auth.tld" %>
 
@@ -14,11 +13,14 @@
         <li class="nav-item">
             <a class="nav-link" href="/">Home page</a>
         </li>
-<auth:authorize>
-        <li class="nav-item">
-            <a class="nav-link" href="/user/${user.code}">${user.name}</a>
-        </li>
-</auth:authorize>
+        <auth:authorize>
+            <li class="nav-item">
+                <a class="nav-link" href="/user/${user.code}">${user.name}</a>
+            </li>
+            <form:form method="post" action="/logout">
+                <button>Logout</button>
+            </form:form>
+        </auth:authorize>
         <li class="nav-item">
             <a class="nav-link" href="/login">Sign in</a>
         </li>
