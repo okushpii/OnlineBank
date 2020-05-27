@@ -1,6 +1,6 @@
 package com.alexbro.onlinebank.storeFront.controller;
 
-import com.alexbro.onlinebank.storefront.controller.HomePageController;
+import com.alexbro.onlinebank.webfront.controller.pages.HomePageController;
 import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.facade.data.user.UserData;
 import com.alexbro.onlinebank.facade.user.UserFacade;

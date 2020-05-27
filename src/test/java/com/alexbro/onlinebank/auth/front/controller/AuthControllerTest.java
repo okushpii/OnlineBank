@@ -4,6 +4,7 @@ import com.alexbro.onlinebank.auth.exception.AuthException;
 import com.alexbro.onlinebank.auth.facade.AuthFacade;
 import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.auth.facade.data.AuthRequest;
+import com.alexbro.onlinebank.webfront.controller.AuthController;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

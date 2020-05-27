@@ -1,7 +1,7 @@
 package com.alexbro.onlinebank.storeFront.controller;
 
 import com.alexbro.onlinebank.auth.facade.data.AuthRequest;
-import com.alexbro.onlinebank.storefront.controller.LoginPageController;
+import com.alexbro.onlinebank.webfront.controller.pages.LoginPageController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

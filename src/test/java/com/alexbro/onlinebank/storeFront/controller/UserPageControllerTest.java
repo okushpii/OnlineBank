@@ -1,6 +1,6 @@
 package com.alexbro.onlinebank.storeFront.controller;
 
-import com.alexbro.onlinebank.storefront.controller.UserPageController;
+import com.alexbro.onlinebank.webfront.controller.pages.UserPageController;
 import com.alexbro.onlinebank.facade.data.user.UserData;
 import com.alexbro.onlinebank.facade.user.UserFacade;
 import org.junit.Test;

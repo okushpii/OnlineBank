@@ -1,11 +1,11 @@
-package com.alexbro.onlinebank.auth.front.controller;
+package com.alexbro.onlinebank.webfront.controller;
 
 import com.alexbro.onlinebank.auth.AuthConstants;
 import com.alexbro.onlinebank.auth.facade.AuthFacade;
 import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.auth.facade.data.AuthRequest;
 import com.alexbro.onlinebank.auth.exception.AuthException;
-import com.alexbro.onlinebank.WebConstants;
+import com.alexbro.onlinebank.webfront.WebConstants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,7 +16,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-@RequestMapping(WebConstants.Mapping.AUTH_MAPPING)
+@RequestMapping(WebConstants.Mapping.AUTH)
 public class AuthController {
 
     @Resource
@@ -28,11 +28,11 @@ public class AuthController {
         try {
             AuthData authData = authFacade.authorize(authRequest.getUsername(),
                     authRequest.getPassword());
-            request.getSession().setAttribute(AuthConstants.AUTH_DATA_ATTRIBUTE, authData);
-            return WebConstants.Util.REDIRECT + WebConstants.Mapping.USER_PAGE_MAPPING +  "/" + authData.getUserCode();
+            request.getSession().setAttribute(WebConstants.SessionAttributes.AUTH_DATA, authData);
+            return WebConstants.Util.REDIRECT + WebConstants.Mapping.USER +  "/" + authData.getUserCode();
         }catch (AuthException e){
             model.addAttribute("error" , AuthConstants.ERROR_MESSAGE);
-            return WebConstants.Pages.LOGIN_PAGE;
+            return WebConstants.Pages.LOGIN;
         }
     }
 }
