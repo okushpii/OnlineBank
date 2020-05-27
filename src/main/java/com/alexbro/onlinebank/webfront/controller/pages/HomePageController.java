@@ -1,8 +1,8 @@
-package com.alexbro.onlinebank.storefront.controller;
+package com.alexbro.onlinebank.webfront.controller.pages;
 
 import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.facade.user.UserFacade;
-import com.alexbro.onlinebank.WebConstants;
+import com.alexbro.onlinebank.webfront.WebConstants;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @Controller
-@RequestMapping(WebConstants.Mapping.HOME_PAGE_MAPPING)
+@RequestMapping(WebConstants.Mapping.HOME)
 public class HomePageController {
 
     @Resource
@@ -21,10 +21,9 @@ public class HomePageController {
 
     @GetMapping
     public String getHomePage(Model model, HttpServletRequest request) {
-        Optional<AuthData> authData = Optional.ofNullable((AuthData) request.getSession().getAttribute(WebConstants.
-                Attributes.AUTH_DATA_ATTRIBUTE));
+        Optional<AuthData> authData = Optional.ofNullable((AuthData) request.getSession().getAttribute(WebConstants.SessionAttributes.AUTH_DATA));
         authData.ifPresent(ad -> userFacade.getByCode(ad.getUserCode())
-                .ifPresent(u -> model.addAttribute(WebConstants.Attributes.USER_ATTRIBUTE, u)));
-        return WebConstants.Pages.HOME_PAGE;
+                .ifPresent(u -> model.addAttribute(WebConstants.RequestAttributes.USER, u)));
+        return WebConstants.Pages.HOME;
     }
 }

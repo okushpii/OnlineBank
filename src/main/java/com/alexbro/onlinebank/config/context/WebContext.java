@@ -1,7 +1,7 @@
 package com.alexbro.onlinebank.config.context;
 
-import com.alexbro.onlinebank.WebConstants;
-import com.alexbro.onlinebank.auth.front.interceptor.AuthInterceptor;
+import com.alexbro.onlinebank.webfront.WebConstants;
+import com.alexbro.onlinebank.webfront.interceptor.AuthInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -16,7 +16,7 @@ public class WebContext implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authInterceptor).addPathPatterns(WebConstants.Mapping.USER_PAGE_MAPPING + "/**");
+        registry.addInterceptor(authInterceptor).addPathPatterns(WebConstants.Mapping.USER + "/**");
     }
 
 }

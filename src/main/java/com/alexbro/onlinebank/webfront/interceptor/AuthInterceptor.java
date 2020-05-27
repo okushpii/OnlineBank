@@ -1,6 +1,6 @@
-package com.alexbro.onlinebank.auth.front.interceptor;
+package com.alexbro.onlinebank.webfront.interceptor;
 
-import com.alexbro.onlinebank.WebConstants;
+import com.alexbro.onlinebank.webfront.WebConstants;
 import com.alexbro.onlinebank.auth.AuthConstants;
 import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.auth.facade.AuthFacade;
@@ -22,7 +22,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
 
-        AuthData authData = (AuthData) request.getSession().getAttribute(AuthConstants.AUTH_DATA_ATTRIBUTE);
+        AuthData authData = (AuthData) request.getSession().getAttribute(WebConstants.SessionAttributes.AUTH_DATA);
 
         if (!authFacade.isAuthorized(authData)){
             sendRedirect(response);
@@ -34,7 +34,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
     private void sendRedirect(HttpServletResponse response){
         try {
-            response.sendRedirect(WebConstants.Mapping.LOGIN_PAGE_MAPPING);
+            response.sendRedirect(WebConstants.Mapping.LOGIN);
         } catch (IOException e) {
             e.printStackTrace();
         }

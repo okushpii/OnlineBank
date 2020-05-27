@@ -2,7 +2,7 @@ package com.alexbro.onlinebank.config;
 
 import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.auth.facade.AuthFacade;
-import com.alexbro.onlinebank.auth.front.interceptor.AuthInterceptor;
+import com.alexbro.onlinebank.webfront.interceptor.AuthInterceptor;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
