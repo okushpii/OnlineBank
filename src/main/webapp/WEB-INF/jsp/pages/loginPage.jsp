@@ -5,7 +5,8 @@
 <html>
 <%@include file="/WEB-INF/jsp/fragments/head.jsp" %>
 <%@include file="/WEB-INF/jsp/fragments/header.jsp" %>
-<%@include file="/WEB-INF/jsp/fragments/loginForm.jsp"%>
 <body>
+<%@include file="/WEB-INF/jsp/fragments/loginForm.jsp"%>
 </body>
+<%@include file="/WEB-INF/jsp/fragments/scripts.jsp"%>
 </html>

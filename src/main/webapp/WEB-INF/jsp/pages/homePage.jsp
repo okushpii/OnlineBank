@@ -4,4 +4,5 @@
 <%@include file="/WEB-INF/jsp/fragments/header.jsp" %>
 <body>
 </body>
+<%@include file="/WEB-INF/jsp/fragments/scripts.jsp"%>
 </html>
