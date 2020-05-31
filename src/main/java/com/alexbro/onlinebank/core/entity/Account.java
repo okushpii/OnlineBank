@@ -11,7 +11,18 @@ import javax.persistence.Table;
 public class Account extends BaseEntity {
 
     @Column
+    private Long cardNumber;
+
+    @Column
     private Long money;
+
+    public Long getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(Long cardNumber) {
+        this.cardNumber = cardNumber;
+    }
 
     public Long getMoney() {
         return money;
