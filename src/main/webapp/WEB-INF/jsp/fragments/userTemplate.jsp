@@ -16,13 +16,13 @@
                     ${user.name}
                 </h5>
                 <h6>
-                    User profile
+                    <spring:message key="profile"/>
                 </h6>
                 <div class="profile-img">
                     <img width="300px" height="180px" src= <c:url value="/img/user-icon.png"/>>
                     <br><br>
                     <div class="file btn btn-lg btn-primary">
-                        Change Photo
+                        <spring:message key="changePhoto"/>
                     </div>
                 </div>
             </div>
@@ -33,23 +33,23 @@
                 <li class="nav-item">
                     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
                        aria-controls="home"
-                       aria-selected="true">About</a>
+                       aria-selected="true"><spring:message key="about"/></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
-                       aria-controls="profile" aria-selected="false">Accounts</a>
+                       aria-controls="profile" aria-selected="false"><spring:message key="accounts"/> </a>
                 </li>
             </ul>
             <br>
             <div>
-                <input type="submit" class="btn btn-secondary" name="btnAddMore" value="Edit Profile"/>
+                <input type="submit" class="btn btn-secondary" name="btnAddMore" value=<spring:message key="editProfile"/> />
             </div>
             <br>
             <div class="tab-content profile-tab" id="myTabContent">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                     <div class="row">
                         <div class="col-md-6">
-                            <label>User Id</label>
+                            <label><spring:message key="userId"/> </label>
                         </div>
                         <div class="col-md-6">
                             <p>${user.code}</p>
@@ -57,7 +57,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <label>Name</label>
+                            <label><spring:message key="name"/></label>
                         </div>
                         <div class="col-md-6">
                             <p>${user.name}</p>
@@ -65,7 +65,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <label>Email</label>
+                            <label><spring:message key="email"/></label>
                         </div>
                         <div class="col-md-6">
                             <p>${user.email}</p>
@@ -73,7 +73,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <label>Phone</label>
+                            <label><spring:message key="phone"/></label>
                         </div>
                         <div class="col-md-6">
                             <p>123 456 7890</p>
@@ -85,7 +85,7 @@
                 <c:forEach items="${user.accounts}" var="accounts">
                     <div class="row">
                         <div class="col-md-6">
-                            <label>Account id:</label>
+                            <label><spring:message key="cardId"/></label>
                         </div>
                         <div class="col-md-6">
                             <p>${accounts.cardNumber}</p>
@@ -93,7 +93,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <label>Money</label>
+                            <label><spring:message key="money"/></label>
                         </div>
                         <div class="col-md-6">
                             <p>${accounts.money}</p>
