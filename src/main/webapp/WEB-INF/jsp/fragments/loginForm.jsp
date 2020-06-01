@@ -15,33 +15,33 @@
                 <div class="myform form ">
                     <div class="logo mb-3">
                         <div class="col-md-12 text-center">
-                            <h1>Login</h1>
+                            <h1><spring:message key="login"/></h1>
                         </div>
                     </div>
 
                     <form:form method="post" action="/auth" modelAttribute="authRequest">
                         <div class="form-group">
-                            <label>Username</label>
-                            <form:input type="text" name="username" class="form-control"
-                                        placeholder="Enter username" path="username"/>
+                            <label><spring:message key="username"/></label>
+                            <input type="text" name="username" class="form-control"
+                                        placeholder = <spring:message key="enterUsername"/> path="username"/>
                         </div>
                         <div class="form-group">
-                            <label>Password</label>
-                            <form:input type="password" name="password" class="form-control"
-                                        placeholder="Enter Password" path="password"/>
+                            <label><spring:message key="password"/></label>
+                            <input type="password" name="password" class="form-control"
+                                        placeholder = <spring:message key="enterPassword"/> path="password"/>
                         </div>
                         <div class="form-group">
-                            <p class="text-center">By signing up you accept our <a href="#">Terms Of Use</a></p>
+                            <p class="text-center"><spring:message key="acceptOf"/> <a href="#"><spring:message key="termsOfUse"/></a></p>
                         </div>
                         <div class="col-md-12 text-center ">
-                            <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Login</button>
+                            <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm"><spring:message key="login"/></button>
                         </div>
                         <div class="form-group">
-                            <p class="text-center">Don't have account? <a href="#" id="signup">Sign up here</a></p>
+                            <p class="text-center"><spring:message key="haveNotAccount"/> <a href="#"><spring:message key="singUp"/></a></p>
                         </div>
                         <c:if test="${not empty error}">
                             <div class="alert alert-danger" role="alert">
-                                    ${error}
+                            <spring:message key="errorMessage"/>
                             </div>
                         </c:if>
                     </form:form>
