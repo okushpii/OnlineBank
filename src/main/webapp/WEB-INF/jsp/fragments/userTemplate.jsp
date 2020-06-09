@@ -42,7 +42,8 @@
             </ul>
             <br>
             <div>
-                <input type="submit" class="btn btn-secondary" name="btnAddMore" value=<spring:message key="editProfile"/> />
+                <input type="submit" class="btn btn-secondary" name="btnAddMore" value=
+                        <spring:message key="editProfile"/>/>
             </div>
             <br>
             <div class="tab-content profile-tab" id="myTabContent">
@@ -82,29 +83,45 @@
                 </div>
 
                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                <c:forEach items="${user.accounts}" var="accounts">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label><spring:message key="cardId"/></label>
+                    <c:forEach items="${user.accounts}" var="accounts">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label><spring:message key="cardId"/></label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>${accounts.cardNumber}</p>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <p>${accounts.cardNumber}</p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label><spring:message key="money"/></label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>${accounts.money}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label><spring:message key="money"/></label>
-                        </div>
-                        <div class="col-md-6">
-                            <p>${accounts.money}</p>
-                        </div>
-                    </div>
-                </c:forEach>
+                    </c:forEach>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<br><br>
+<form method="post" action="/account/transfer">
+    <select name="accountCode">
+        <c:forEach var="account" items="${user.accounts}">
+            <option value="${account.code}">${account.cardNumber}</option>
+        </c:forEach>
+    </select>
+    <br><br>
+    <input name="cardNumber" type="number" required>
+    <br><br>
+    <input name="sum" type="number" required>
+    <br><br>
+    <button type="submit">Transfer</button>
+    <br>
+    <p>${error}</p>
+</form>
 
 </body>
 </html>
