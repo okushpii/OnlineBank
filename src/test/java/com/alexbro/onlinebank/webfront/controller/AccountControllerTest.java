@@ -30,7 +30,7 @@ public class AccountControllerTest {
     private static final int SUM = 100;
     private static final String USER_REDIRECT = "redirect:/user/";
     private static final String USER_CODE = "u1";
-    private static final String ERROR_MESSAGE = "errorMessage";
+    private static final String ERROR_MESSAGE = "user.error.message";
 
     @InjectMocks
     private AccountController testedInstance;
