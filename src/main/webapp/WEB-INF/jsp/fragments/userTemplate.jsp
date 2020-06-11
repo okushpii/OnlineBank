@@ -22,7 +22,7 @@
                     <img width="300px" height="180px" src= <c:url value="/img/user-icon.png"/>>
                     <br><br>
                     <div class="file btn btn-lg btn-primary">
-                        <spring:message key="changePhoto"/>
+                        <spring:message key="change.photo"/>
                     </div>
                 </div>
             </div>
@@ -43,14 +43,14 @@
             <br>
             <div>
                 <input type="submit" class="btn btn-secondary" name="btnAddMore" value=
-                        <spring:message key="editProfile"/>/>
+                        <spring:message key="edit.profile"/>/>
             </div>
             <br>
             <div class="tab-content profile-tab" id="myTabContent">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                     <div class="row">
                         <div class="col-md-6">
-                            <label><spring:message key="userId"/> </label>
+                            <label><spring:message key="user.id"/> </label>
                         </div>
                         <div class="col-md-6">
                             <p>${user.code}</p>
@@ -86,7 +86,7 @@
                     <c:forEach items="${user.accounts}" var="accounts">
                         <div class="row">
                             <div class="col-md-6">
-                                <label><spring:message key="cardId"/></label>
+                                <label><spring:message key="card.id"/></label>
                             </div>
                             <div class="col-md-6">
                                 <p>${accounts.cardNumber}</p>
