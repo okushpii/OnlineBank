@@ -3,6 +3,7 @@ package com.alexbro.onlinebank.facade.account;
 import com.alexbro.onlinebank.core.entity.Account;
 import com.alexbro.onlinebank.core.service.account.AccountOperationService;
 import com.alexbro.onlinebank.core.service.account.AccountService;
+import com.alexbro.onlinebank.core.service.config.ConfigurationService;
 import com.alexbro.onlinebank.core.service.i18service.I18Service;
 import com.alexbro.onlinebank.facade.exception.AccountsOperationException;
 import org.junit.Before;
@@ -25,6 +26,7 @@ public class DefaultAccountFacadeTest {
     private static final Long CARD_NUMBER = 123345L;
     private static int SUM = 1000;
     private static String ERROR_MESSAGE = "Error message";
+    private static String LIMIT = "20000";
 
     @InjectMocks
     private DefaultAccountFacade testedInstance;
@@ -39,12 +41,15 @@ public class DefaultAccountFacadeTest {
     private Account accountTo;
     @Mock
     private I18Service i18Service;
+    @Mock
+    private ConfigurationService configurationService;
 
     @Before
     public void setUp() {
         when(accountService.getByCode(ACCOUNT_CODE)).thenReturn(Optional.of(accountFrom));
         when(accountService.getByCardNumber(CARD_NUMBER)).thenReturn(Optional.of(accountTo));
         when(accountFrom.getMoney()).thenReturn(BigDecimal.valueOf(5000));
+        when(configurationService.findRequired("transfer.limit")).thenReturn(LIMIT);
     }
 
     @Test
@@ -83,5 +88,12 @@ public class DefaultAccountFacadeTest {
         when(i18Service.getLocalizedValue("accounts.operation.message")).thenReturn(ERROR_MESSAGE);
 
         testedInstance.transfer(ACCOUNT_CODE, CARD_NUMBER, BigDecimal.valueOf(SUM));
+    }
+
+    @Test(expected = AccountsOperationException.class)
+    public void shouldTransferWhenSumIsBiggerThenLimit() {
+        when(i18Service.getLocalizedValue("sum.is.bigger.then.limit.message")).thenReturn(ERROR_MESSAGE);
+
+        testedInstance.transfer(ACCOUNT_CODE, CARD_NUMBER, new BigDecimal(LIMIT));
     }
 }
