@@ -3,9 +3,9 @@ package com.alexbro.onlinebank.facade.account;
 import com.alexbro.onlinebank.core.entity.Account;
 import com.alexbro.onlinebank.core.service.account.AccountOperationService;
 import com.alexbro.onlinebank.core.service.account.AccountService;
-import com.alexbro.onlinebank.core.service.config.ConfigurationService;
 import com.alexbro.onlinebank.core.service.i18service.I18Service;
-import com.alexbro.onlinebank.facade.exception.AccountsOperationException;
+import com.alexbro.onlinebank.core.exception.AccountsOperationException;
+import com.alexbro.onlinebank.core.service.validation.SumValidationService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +26,6 @@ public class DefaultAccountFacadeTest {
     private static final Long CARD_NUMBER = 123345L;
     private static int SUM = 1000;
     private static String ERROR_MESSAGE = "Error message";
-    private static String LIMIT = "20000";
 
     @InjectMocks
     private DefaultAccountFacade testedInstance;
@@ -42,20 +41,21 @@ public class DefaultAccountFacadeTest {
     @Mock
     private I18Service i18Service;
     @Mock
-    private ConfigurationService configurationService;
+    private SumValidationService sumValidationService;
+
 
     @Before
     public void setUp() {
         when(accountService.getByCode(ACCOUNT_CODE)).thenReturn(Optional.of(accountFrom));
         when(accountService.getByCardNumber(CARD_NUMBER)).thenReturn(Optional.of(accountTo));
         when(accountFrom.getMoney()).thenReturn(BigDecimal.valueOf(5000));
-        when(configurationService.findRequired("transfer.limit")).thenReturn(LIMIT);
     }
 
     @Test
     public void shouldTransfer() {
         testedInstance.transfer(ACCOUNT_CODE, CARD_NUMBER, BigDecimal.valueOf(SUM));
 
+        verify(sumValidationService).validate(BigDecimal.valueOf(SUM));
         verify(accountOperationService).transfer(accountFrom, accountTo, BigDecimal.valueOf(SUM));
     }
 
@@ -76,24 +76,10 @@ public class DefaultAccountFacadeTest {
     }
 
     @Test(expected = AccountsOperationException.class)
-    public void shouldTransferWhenSumIsInvalid() {
-        when(i18Service.getLocalizedValue("invalid.sum.message")).thenReturn(ERROR_MESSAGE);
-
-        testedInstance.transfer(ACCOUNT_CODE, CARD_NUMBER, BigDecimal.valueOf(-1000));
-    }
-
-    @Test(expected = AccountsOperationException.class)
     public void shouldTransferWhenInsufficientFound() {
         when(accountFrom.getMoney()).thenReturn(BigDecimal.valueOf(500));
         when(i18Service.getLocalizedValue("accounts.operation.message")).thenReturn(ERROR_MESSAGE);
 
         testedInstance.transfer(ACCOUNT_CODE, CARD_NUMBER, BigDecimal.valueOf(SUM));
-    }
-
-    @Test(expected = AccountsOperationException.class)
-    public void shouldTransferWhenSumIsBiggerThenLimit() {
-        when(i18Service.getLocalizedValue("sum.is.bigger.then.limit.message")).thenReturn(ERROR_MESSAGE);
-
-        testedInstance.transfer(ACCOUNT_CODE, CARD_NUMBER, new BigDecimal(LIMIT));
     }
 }
