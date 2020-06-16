@@ -2,7 +2,7 @@ package com.alexbro.onlinebank.webfront.controller;
 
 import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.facade.account.AccountFacade;
-import com.alexbro.onlinebank.facade.exception.AccountsOperationException;
+import com.alexbro.onlinebank.core.exception.AccountsOperationException;
 import com.alexbro.onlinebank.webfront.WebConstants;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;

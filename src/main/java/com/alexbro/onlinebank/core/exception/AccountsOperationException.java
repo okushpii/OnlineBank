@@ -1,4 +1,4 @@
-package com.alexbro.onlinebank.facade.exception;
+package com.alexbro.onlinebank.core.exception;
 
 public class AccountsOperationException extends RuntimeException {
 
