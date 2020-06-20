@@ -46,14 +46,14 @@ public class AuthControllerTest {
     private AuthRequest authRequest;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         when(request.getSession()).thenReturn(session);
         when(authRequest.getUsername()).thenReturn(USER_NAME);
         when(authRequest.getPassword()).thenReturn(USER_PASSWORD);
     }
 
     @Test
-    public void shouldAuthorise(){
+    public void shouldAuthorise() {
         when(authFacade.authorize(USER_NAME, USER_PASSWORD)).thenReturn(authData);
 
         testedEntry.authorize(authRequest, request, model);
@@ -62,8 +62,8 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void shouldReturnLoginPage(){
-        when(authFacade.authorize(USER_NAME, USER_PASSWORD)).thenThrow( new AuthException(ERROR_MESSAGE));
+    public void shouldReturnLoginPage() {
+        when(authFacade.authorize(USER_NAME, USER_PASSWORD)).thenThrow(new AuthException(ERROR_MESSAGE));
 
         String result = testedEntry.authorize(authRequest, request, model);
 
@@ -72,8 +72,11 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void shouldLogOut(){
-        String result =  testedEntry.logout(request);
+    public void shouldLogOut() {
+        AuthData authData = new AuthData();
+        when(session.getAttribute("authData")).thenReturn(authData);
+
+        String result = testedEntry.logout(request);
 
         verify(session).removeAttribute(AUTH_DATA);
         assertEquals(LOGIN_REDIRECT, result);
