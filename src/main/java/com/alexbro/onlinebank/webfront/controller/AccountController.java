@@ -4,6 +4,8 @@ import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.facade.account.AccountFacade;
 import com.alexbro.onlinebank.core.exception.AccountsOperationException;
 import com.alexbro.onlinebank.webfront.WebConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,8 @@ public class AccountController {
     @Resource
     private AccountFacade accountFacade;
 
+    private static Logger logger = LoggerFactory.getLogger(AccountController.class);
+
     @PostMapping("/transfer")
     public String transfer(@RequestParam String accountCode, @RequestParam Long cardNumber,
                            @RequestParam BigDecimal sum, HttpServletRequest request,
@@ -32,6 +36,7 @@ public class AccountController {
             accountFacade.transfer(accountCode, cardNumber, sum);
         } catch (AccountsOperationException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
+            logger.info(e.getMessage(), e);
         }
         return WebConstants.Util.REDIRECT + WebConstants.Mapping.USER + "/" + userCode;
     }

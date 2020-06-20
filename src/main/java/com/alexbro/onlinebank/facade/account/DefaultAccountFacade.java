@@ -7,6 +7,8 @@ import com.alexbro.onlinebank.core.service.i18service.I18Service;
 import com.alexbro.onlinebank.core.service.validation.SumValidationService;
 import com.alexbro.onlinebank.facade.FacadeConstants;
 import com.alexbro.onlinebank.core.exception.AccountsOperationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -24,6 +26,8 @@ public class DefaultAccountFacade implements AccountFacade {
     @Resource
     private SumValidationService sumValidationService;
 
+    private static Logger logger = LoggerFactory.getLogger(DefaultAccountFacade.class);
+
     @Override
     public void transfer(String accountCode, Long cardNumber, BigDecimal sum) {
         sumValidationService.validate(sum);
@@ -37,7 +41,11 @@ public class DefaultAccountFacade implements AccountFacade {
                 orElseThrow(() -> new AccountsOperationException(i18Service.
                         getLocalizedValue(FacadeConstants.CARD_NUMBER_NOT_FOUND_MESSAGE)));
 
+        logger.info("Transfer start from card:" + accountFrom.getCardNumber() + " to card:" +
+                accountTo.getCardNumber() + " Sum:" + sum);
+
         accountOperationService.transfer(accountFrom, accountTo, sum);
+        logger.info("Transaction is success");
     }
 
     private void validateAccountFromMoney(BigDecimal accountFromMoney, BigDecimal sum) {
