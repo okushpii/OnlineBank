@@ -29,6 +29,7 @@ public class AccountControllerTest {
     private static final Long CARD_NUMBER = 512333L;
     private static final int SUM = 100;
     private static final String USER_REDIRECT = "redirect:/user/";
+    private static final String TRANSFER_REDIRECT = "redirect:/transfer";
     private static final String USER_CODE = "u1";
     private static final String ERROR_MESSAGE = "user.error.message";
 
@@ -70,7 +71,7 @@ public class AccountControllerTest {
                 BigDecimal.valueOf(SUM), request, redirectAttributes);
 
         verify(redirectAttributes).addFlashAttribute("error", ERROR_MESSAGE);
-        assertEquals(USER_REDIRECT + USER_CODE, result);
+        assertEquals(TRANSFER_REDIRECT, result);
 
     }
 }

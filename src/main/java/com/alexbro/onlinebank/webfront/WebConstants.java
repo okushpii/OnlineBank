@@ -9,6 +9,7 @@ public interface WebConstants {
         String AUTH = "/auth";
         String LOGOUT = "/logout";
         String ACCOUNT = "/account";
+        String TRANSFER = "/transfer";
     }
 
     interface RequestAttributes {
@@ -24,6 +25,7 @@ public interface WebConstants {
         String HOME = "pages/homePage";
         String LOGIN = "pages/loginPage";
         String USER = "pages/userPage";
+        String TRANSFER = "pages/transferPage";
     }
 
     interface Util {
