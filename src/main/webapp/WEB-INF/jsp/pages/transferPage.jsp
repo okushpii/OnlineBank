@@ -11,7 +11,7 @@
 <div class="container" style="alignment: left">
     <div class="row">
         <%@include file="/WEB-INF/jsp/fragments/sidePanel.jsp" %>
-        <%@include file="/WEB-INF/jsp/fragments/userTemplate.jsp" %>
+        <%@include file="/WEB-INF/jsp/fragments/transferTemplate.jsp" %>
     </div>
 </div>
 </body>

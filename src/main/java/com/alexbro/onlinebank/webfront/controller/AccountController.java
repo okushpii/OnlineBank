@@ -34,10 +34,11 @@ public class AccountController {
         String userCode = authData.getUserCode();
         try {
             accountFacade.transfer(accountCode, cardNumber, sum);
+            return WebConstants.Util.REDIRECT + WebConstants.Mapping.USER + "/" + userCode;
         } catch (AccountsOperationException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             logger.info(e.getMessage(), e);
+            return WebConstants.Util.REDIRECT + WebConstants.Mapping.TRANSFER;
         }
-        return WebConstants.Util.REDIRECT + WebConstants.Mapping.USER + "/" + userCode;
     }
 }
