@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<form:form method="post" action="/account/transfer" modelAttribute="user">
+<form:form method="post" action="/account/transfer" modelAttribute="accounts">
     <div class="col">
         <div class="alert alert-info" role="alert">
             <p><spring:message key="select.your.card.number"/></p>
@@ -17,7 +17,7 @@
             <label class="control-label"><spring:message key="card.number.of.sender"/></label>
             <div class="controls">
                 <select class="form-control" name="accountCode">
-                    <c:forEach var="account" items="${user.accounts}">
+                    <c:forEach var="account" items="${accounts}">
                         <option value="${account.code}">${account.cardNumber}</option>
                     </c:forEach>
                 </select>

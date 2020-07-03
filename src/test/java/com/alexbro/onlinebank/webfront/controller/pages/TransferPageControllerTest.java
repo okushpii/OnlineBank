@@ -59,7 +59,7 @@ public class TransferPageControllerTest {
     public void shouldAddUserAttributeWhenAuthDataIsPresent() {
         String result = testedInstance.getTransferPage(model, request);
 
-        verify(model).addAttribute("user", userData);
+        verify(model).addAttribute("accounts", userData.getAccounts());
         assertEquals(TRANSFER_PAGE, result);
     }
 
@@ -69,6 +69,6 @@ public class TransferPageControllerTest {
 
         testedInstance.getTransferPage(model, request);
 
-        verify(model, never()).addAttribute("user", userData);
+        verify(model, never()).addAttribute("accounts", userData.getAccounts());
     }
 }

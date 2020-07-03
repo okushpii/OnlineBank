@@ -22,8 +22,7 @@ public class TransferPageController {
     @GetMapping
     public String getTransferPage(Model model, HttpServletRequest request) {
         Optional<AuthData> authData = Optional.ofNullable((AuthData) request.getSession().getAttribute(WebConstants.SessionAttributes.AUTH_DATA));
-        authData.ifPresent(ad -> userFacade.getByCode(ad.getUserCode())
-                .ifPresent(u -> model.addAttribute(WebConstants.RequestAttributes.USER, u)));
+        authData.flatMap(ad -> userFacade.getByCode(ad.getUserCode())).ifPresent(u -> model.addAttribute(WebConstants.RequestAttributes.ACCOUNTS, u.getAccounts()));
         return WebConstants.Pages.TRANSFER;
     }
 }

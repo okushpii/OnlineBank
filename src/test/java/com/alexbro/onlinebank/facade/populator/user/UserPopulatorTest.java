@@ -2,6 +2,8 @@ package com.alexbro.onlinebank.facade.populator.user;
 
 import com.alexbro.onlinebank.core.entity.Account;
 import com.alexbro.onlinebank.core.entity.User;
+import com.alexbro.onlinebank.facade.converter.utill.Converter;
+import com.alexbro.onlinebank.facade.data.account.AccountData;
 import com.alexbro.onlinebank.facade.data.user.UserData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +32,12 @@ public class UserPopulatorTest {
     @Mock
     private Account account;
 
+    @Mock
+    private AccountData accountData;
+
+    @Mock
+    private Converter<Account, AccountData>  accountsConverter;
+
     @Test
     public void shouldPopulate(){
         UserData userData = new UserData();
@@ -39,7 +47,7 @@ public class UserPopulatorTest {
 
         assertEquals(USER_NAME, userData.getName());
         assertEquals(USER_EMAIL, userData.getEmail());
-        assertEquals(List.of(account), userData.getAccounts());
+        assertEquals(List.of(accountData), userData.getAccounts());
     }
 
     private void prepareFields(){
@@ -47,5 +55,6 @@ public class UserPopulatorTest {
         when(user.getName()).thenReturn(USER_NAME);
         when(user.getEmail()).thenReturn(USER_EMAIL);
         when(user.getAccounts()).thenReturn(List.of(account));
+        when(accountsConverter.convertAll(List.of(account))).thenReturn(List.of(accountData));
     }
 }

@@ -14,6 +14,7 @@ public interface WebConstants {
 
     interface RequestAttributes {
         String USER = "user";
+        String ACCOUNTS = "accounts";
         String AUTH_REQUEST = "authRequest";
     }
 
