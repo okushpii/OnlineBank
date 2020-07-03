@@ -1,6 +1,6 @@
 package com.alexbro.onlinebank.facade.data.user;
 
-import com.alexbro.onlinebank.core.entity.Account;
+import com.alexbro.onlinebank.facade.data.account.AccountData;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ public class UserData {
     private String code;
     private String name;
     private String email;
-    private List<Account> accounts;
+    private List<AccountData> accounts;
 
     public String getCode() {
         return code;
@@ -35,11 +35,11 @@ public class UserData {
         this.email = email;
     }
 
-    public List<Account> getAccounts() {
+    public List<AccountData> getAccounts() {
         return accounts;
     }
 
-    public void setAccounts(List<Account> accounts) {
+    public void setAccounts(List<AccountData> accounts) {
         this.accounts = accounts;
     }
 }
