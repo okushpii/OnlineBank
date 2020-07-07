@@ -90,6 +90,14 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
+                        <label>Currency</label>
+                    </div>
+                    <div class="col-md-6">
+                        <p>${accounts.currency.name}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
                         <label><spring:message key="money"/></label>
                     </div>
                     <div class="col-md-6">

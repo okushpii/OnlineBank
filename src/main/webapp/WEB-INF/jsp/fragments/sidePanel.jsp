@@ -9,7 +9,7 @@
         <a href="/user/${user.code}" class="list-group-item active"><span><spring:message
                 key="accounts.operation"/></span></a>
         <a href="/transfer" class="list-group-item"><span><spring:message key="transfer"/></span></a>
-        <a href="#" class="list-group-item"><span><spring:message key="currency.exchange"/> </span></a>
+        <a href="/exchangeStepOne" class="list-group-item"><span><spring:message key="currency.exchange"/> </span></a>
         <a href="#" class="list-group-item"><span>Operation</span></a>
         <a href="#" class="list-group-item"><span>Operation</span></a>
         <a href="#" class="list-group-item"><span>Operation</span></a>
