@@ -82,7 +82,7 @@
             <c:forEach items="${user.accounts}" var="accounts">
                 <div class="row">
                     <div class="col-md-6">
-                        <label><spring:message key="card.id"/></label>
+                        <label><spring:message key="card.number"/></label>
                     </div>
                     <div class="col-md-6">
                         <p>${accounts.cardNumber}</p>
@@ -90,7 +90,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <label>Currency</label>
+                        <label><spring:message key="currency"/></label>
                     </div>
                     <div class="col-md-6">
                         <p>${accounts.currency.name}</p>
