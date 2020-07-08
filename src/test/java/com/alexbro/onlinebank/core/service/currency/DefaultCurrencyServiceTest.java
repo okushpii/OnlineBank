@@ -13,11 +13,13 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultCurrencyServiceTest {
 
     private static final String USER_CODE = "u1";
+    private static final String CURRENCY_CODE = "c1";
 
     @InjectMocks
     private DefaultCurrencyService testedEntry;
@@ -33,5 +35,15 @@ public class DefaultCurrencyServiceTest {
         List<Currency> result = testedEntry.findAllByUser(USER_CODE);
 
         assertEquals(currencies, result);
+    }
+
+    @Test
+    public void shouldGetByCode() {
+        Currency currency = new Currency();
+        when(currencyDao.getByCode(CURRENCY_CODE)).thenReturn(Optional.of(currency));
+
+        Optional<Currency> result = testedEntry.findByCode(CURRENCY_CODE);
+
+        assertEquals(Optional.of(currency), result);
     }
 }

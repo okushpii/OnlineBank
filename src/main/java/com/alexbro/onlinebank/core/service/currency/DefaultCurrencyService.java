@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DefaultCurrencyService implements CurrencyService {
@@ -16,5 +17,10 @@ public class DefaultCurrencyService implements CurrencyService {
     @Override
     public List<Currency> findAllByUser(String userCode) {
         return currencyDao.findAllByUser(userCode);
+    }
+
+    @Override
+    public Optional<Currency> findByCode(String code) {
+        return currencyDao.getByCode(code);
     }
 }

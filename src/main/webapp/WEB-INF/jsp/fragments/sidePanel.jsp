@@ -10,9 +10,11 @@
                 key="accounts.operation"/></span></a>
         <a href="/transfer" class="list-group-item"><span><spring:message key="transfer"/></span></a>
         <a href="/exchangeStepOne" class="list-group-item"><span><spring:message key="currency.exchange"/> </span></a>
-        <a href="#" class="list-group-item"><span>Operation</span></a>
-        <a href="#" class="list-group-item"><span>Operation</span></a>
-        <a href="#" class="list-group-item"><span>Operation</span></a>
+        <c:if test="${not empty error}">
+            <div class="alert alert-danger" role="alert">
+                    ${error}
+            </div>
+        </c:if>
     </div>
 </div>
 </body>
