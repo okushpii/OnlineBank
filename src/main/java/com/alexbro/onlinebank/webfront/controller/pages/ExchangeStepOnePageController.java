@@ -33,7 +33,7 @@ public class ExchangeStepOnePageController {
     public String getExchangeStepOnePage(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
         Optional<AuthData> authData = Optional.ofNullable((AuthData) request.getSession().getAttribute(WebConstants.SessionAttributes.AUTH_DATA));
         try {
-            authData.flatMap(ad -> userFacade.getByCode(ad.getUserCode())).ifPresent(u -> model.
+            authData.flatMap(ad -> userFacade.findByCode(ad.getUserCode())).ifPresent(u -> model.
                     addAttribute(WebConstants.RequestAttributes.CURRENCIES, currencyFacade.findAllByUser(u.getCode())));
             return WebConstants.Pages.EXCHANGE_STEP_ONE;
         } catch (CurrencyException e) {

@@ -14,12 +14,12 @@ public class DefaultUserService implements UserService{
     private UserDao userDao;
 
     @Override
-    public Optional<User> getByUsername(String username) {
-        return userDao.getByUsername(username);
+    public Optional<User> findByUsername(String username) {
+        return userDao.findByUsername(username);
     }
 
     @Override
-    public Optional<User> getByCode(String code) {
-        return userDao.getByCode(code);
+    public Optional<User> findByCode(String code) {
+        return userDao.findByCode(code);
     }
 }

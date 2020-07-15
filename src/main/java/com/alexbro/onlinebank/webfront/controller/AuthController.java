@@ -24,7 +24,7 @@ public class AuthController {
     @Resource
     private AuthFacade authFacade;
 
-    private static Logger logger = LoggerFactory.getLogger(DefaultAccountFacade.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultAccountFacade.class);
 
     @PostMapping
     @RequestMapping(WebConstants.Mapping.AUTH)
@@ -34,11 +34,11 @@ public class AuthController {
             AuthData authData = authFacade.authorize(authRequest.getUsername(),
                     authRequest.getPassword());
             request.getSession().setAttribute(WebConstants.SessionAttributes.AUTH_DATA, authData);
-            logger.info(authData.getUsername() + " is authorised");
+            LOG.info(authData.getUsername() + " is authorised");
             return WebConstants.Util.REDIRECT + WebConstants.Mapping.USER + "/" + authData.getUserCode();
         } catch (AuthException e) {
             model.addAttribute("error", AuthConstants.ERROR_MESSAGE);
-            logger.info(e.getMessage(), e);
+            LOG.info(e.getMessage(), e);
             return WebConstants.Pages.LOGIN;
         }
     }
@@ -49,7 +49,7 @@ public class AuthController {
         AuthData authData = (AuthData) request.getSession().
                 getAttribute(WebConstants.SessionAttributes.AUTH_DATA);
         request.getSession().removeAttribute(WebConstants.SessionAttributes.AUTH_DATA);
-        logger.info(authData.getUsername() + " logout");
+        LOG.info(authData.getUsername() + " logout");
         return WebConstants.Util.REDIRECT + WebConstants.Mapping.LOGIN;
     }
 }

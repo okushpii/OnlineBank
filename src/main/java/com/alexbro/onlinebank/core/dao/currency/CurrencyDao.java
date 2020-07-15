@@ -9,5 +9,5 @@ public interface CurrencyDao {
 
     List<Currency> findAllByUser(String userCode);
 
-    Optional<Currency> getByCode(String code);
+    Optional<Currency> findByCode(String code);
 }

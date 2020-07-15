@@ -30,19 +30,19 @@ public class DefaultUserServiceTest {
     private User user;
 
     @Test
-    public void shouldGetUserByLogin(){
-        when(userDao.getByUsername(USER_LOGIN)).thenReturn(Optional.of(user));
+    public void shouldFindByUserName(){
+        when(userDao.findByUsername(USER_LOGIN)).thenReturn(Optional.of(user));
 
-        Optional<User> result = testedEntry.getByUsername(USER_LOGIN);
+        Optional<User> result = testedEntry.findByUsername(USER_LOGIN);
 
         assertEquals(Optional.of(user), result);
     }
 
     @Test
-    public void shouldGetUserById(){
-        when(userDao.getByCode(USER_CODE)).thenReturn(Optional.of(user));
+    public void shouldFindByCode(){
+        when(userDao.findByCode(USER_CODE)).thenReturn(Optional.of(user));
 
-        Optional<User> result = testedEntry.getByCode(USER_CODE);
+        Optional<User> result = testedEntry.findByCode(USER_CODE);
 
         assertEquals(Optional.of(user), result);
     }

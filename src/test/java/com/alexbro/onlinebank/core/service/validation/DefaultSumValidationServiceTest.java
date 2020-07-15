@@ -17,7 +17,7 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class DefaultSumValidationServiceTest {
 
-    private static final int SUM = 1000;
+    private static final BigDecimal SUM = BigDecimal.valueOf(1000);
 
     @InjectMocks
     private DefaultSumValidationService testedInstance;
@@ -34,11 +34,9 @@ public class DefaultSumValidationServiceTest {
 
     @Test
     public void shouldValidateSum() {
-        BigDecimal sum = BigDecimal.valueOf(SUM);
+        testedInstance.validate(SUM);
 
-        testedInstance.validate(sum);
-
-        verify(firstStrategy).validate(sum);
-        verify(secondStrategy).validate(sum);
+        verify(firstStrategy).validate(SUM);
+        verify(secondStrategy).validate(SUM);
     }
 }

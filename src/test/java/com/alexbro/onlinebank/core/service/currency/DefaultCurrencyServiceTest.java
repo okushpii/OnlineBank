@@ -38,9 +38,9 @@ public class DefaultCurrencyServiceTest {
     }
 
     @Test
-    public void shouldGetByCode() {
+    public void shouldFindByCode() {
         Currency currency = new Currency();
-        when(currencyDao.getByCode(CURRENCY_CODE)).thenReturn(Optional.of(currency));
+        when(currencyDao.findByCode(CURRENCY_CODE)).thenReturn(Optional.of(currency));
 
         Optional<Currency> result = testedEntry.findByCode(CURRENCY_CODE);
 

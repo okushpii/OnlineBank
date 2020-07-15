@@ -1,8 +1,6 @@
 package com.alexbro.onlinebank.facade.account;
 
 import com.alexbro.onlinebank.core.entity.Account;
-import com.alexbro.onlinebank.core.service.account.AccountCalculationService;
-import com.alexbro.onlinebank.core.service.account.AccountOperationService;
 import com.alexbro.onlinebank.core.service.account.AccountService;
 import com.alexbro.onlinebank.core.service.i18service.I18Service;
 import com.alexbro.onlinebank.core.service.validation.SumValidationService;
@@ -25,17 +23,13 @@ public class DefaultAccountFacade implements AccountFacade {
     @Resource
     private AccountService accountService;
     @Resource
-    private AccountOperationService accountOperationService;
-    @Resource
-    private AccountCalculationService accountCalculationService;
-    @Resource
     private I18Service i18Service;
     @Resource
     private SumValidationService sumValidationService;
     @Resource
     private Converter<Account, AccountData> accountConverter;
 
-    private static Logger logger = LoggerFactory.getLogger(DefaultAccountFacade.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultAccountFacade.class);
 
     @Override
     public void transfer(String accountCode, Long cardNumber, BigDecimal sum) {
@@ -50,11 +44,11 @@ public class DefaultAccountFacade implements AccountFacade {
                 orElseThrow(() -> new AccountsOperationException(i18Service.
                         getLocalizedValue(FacadeConstants.CARD_NUMBER_NOT_FOUND_MESSAGE)));
 
-        logger.info("Transfer start from card:" + accountFrom.getCardNumber() + " to card:" +
+        LOG.info("Transfer start from card:" + accountFrom.getCardNumber() + " to card:" +
                 accountTo.getCardNumber() + " Sum:" + sum);
 
-        accountOperationService.transfer(accountFrom, accountTo, sum);
-        logger.info("Transaction is success");
+        accountService.transfer(accountFrom, accountTo, sum);
+        LOG.info("Transaction is success");
     }
 
     @Override
@@ -71,17 +65,6 @@ public class DefaultAccountFacade implements AccountFacade {
     public Optional<AccountData> findByCardNumber(Long cardNumber) {
         return accountService.findByCardNumber(cardNumber).map(a -> accountConverter.convert(a));
     }
-
-    @Override
-    public BigDecimal calculateSumAfterExchange(BigDecimal sum, BigDecimal currentRate, BigDecimal exchangeRate) {
-        return accountCalculationService.calculateSumAfterExchange(sum, currentRate, exchangeRate);
-    }
-
-    @Override
-    public BigDecimal calculateBalanceWithDelta(BigDecimal money, BigDecimal delta) {
-        return accountCalculationService.calculateBalanceWithDelta(money, delta);
-    }
-
 
     private void validateAccountFromMoney(BigDecimal accountFromMoney, BigDecimal sum) {
         if (accountFromMoney.subtract(sum).compareTo(BigDecimal.ZERO) < 0) {

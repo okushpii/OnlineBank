@@ -21,6 +21,6 @@ public class DefaultCurrencyService implements CurrencyService {
 
     @Override
     public Optional<Currency> findByCode(String code) {
-        return currencyDao.getByCode(code);
+        return currencyDao.findByCode(code);
     }
 }

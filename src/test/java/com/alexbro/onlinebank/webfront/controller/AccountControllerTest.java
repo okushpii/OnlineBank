@@ -27,7 +27,7 @@ public class AccountControllerTest {
     private static final String AUTH_DATA_ATTRIBUTE = "authData";
     private static final String ACCOUNT_CODE = "a1";
     private static final Long CARD_NUMBER = 512333L;
-    private static final int SUM = 100;
+    private static final BigDecimal SUM = BigDecimal.valueOf(100);
     private static final String USER_REDIRECT = "redirect:/user/";
     private static final String TRANSFER_REDIRECT = "redirect:/transfer";
     private static final String USER_CODE = "u1";
@@ -56,19 +56,19 @@ public class AccountControllerTest {
 
     @Test
     public void shouldTransfer() {
-        String result = testedInstance.transfer(ACCOUNT_CODE, CARD_NUMBER, BigDecimal.valueOf(SUM), request, redirectAttributes);
+        String result = testedInstance.transfer(ACCOUNT_CODE, CARD_NUMBER, SUM, request, redirectAttributes);
 
-        verify(accountFacade).transfer(ACCOUNT_CODE, CARD_NUMBER, BigDecimal.valueOf(SUM));
+        verify(accountFacade).transfer(ACCOUNT_CODE, CARD_NUMBER, SUM);
         assertEquals(USER_REDIRECT + USER_CODE, result);
     }
 
     @Test
     public void shouldReturnError() {
         doThrow(new AccountsOperationException(ERROR_MESSAGE)).when(accountFacade).transfer(ACCOUNT_CODE, CARD_NUMBER,
-                BigDecimal.valueOf(SUM));
+                SUM);
 
         String result = testedInstance.transfer(ACCOUNT_CODE, CARD_NUMBER,
-                BigDecimal.valueOf(SUM), request, redirectAttributes);
+                SUM, request, redirectAttributes);
 
         verify(redirectAttributes).addFlashAttribute("error", ERROR_MESSAGE);
         assertEquals(TRANSFER_REDIRECT, result);

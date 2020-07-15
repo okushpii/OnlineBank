@@ -16,7 +16,4 @@ public interface AccountFacade {
 
     Optional<AccountData> findByCardNumber(Long cardNumber);
 
-    BigDecimal calculateSumAfterExchange(BigDecimal sum, BigDecimal currentRate, BigDecimal exchangeRate);
-
-    BigDecimal calculateBalanceWithDelta(BigDecimal money, BigDecimal delta);
 }

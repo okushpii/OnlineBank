@@ -34,7 +34,7 @@ public class DefaultAuthFacade implements AuthFacade {
 
     @Override
     public AuthData authorize(String username, String password) {
-        Optional<User> user = userService.getByUsername(username);
+        Optional<User> user = userService.findByUsername(username);
         return user.filter(u -> isUserValid(u, password))
                 .map(this::createAuthenticationData)
                 .orElseThrow(() -> new AuthException(AuthConstants.ERROR_MESSAGE));
@@ -55,7 +55,7 @@ public class DefaultAuthFacade implements AuthFacade {
     @Override
     public boolean isAuthorized(AuthData authData) {
       return Optional.ofNullable(authData)
-              .flatMap(ad -> userService.getByUsername(ad.getUsername()))
+              .flatMap(ad -> userService.findByUsername(ad.getUsername()))
               .map(u -> isTokensEqual(authData, u.getPassword()))
               .orElse(false);
     }

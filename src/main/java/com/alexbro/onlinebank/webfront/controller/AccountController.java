@@ -23,7 +23,7 @@ public class AccountController {
     @Resource
     private AccountFacade accountFacade;
 
-    private static Logger logger = LoggerFactory.getLogger(AccountController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AccountController.class);
 
     @PostMapping("/transfer")
     public String transfer(@RequestParam String accountCode, @RequestParam Long cardNumber,
@@ -37,7 +37,7 @@ public class AccountController {
             return WebConstants.Util.REDIRECT + WebConstants.Mapping.USER + "/" + userCode;
         } catch (AccountsOperationException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
-            logger.info(e.getMessage(), e);
+            LOG.info(e.getMessage(), e);
             return WebConstants.Util.REDIRECT + WebConstants.Mapping.TRANSFER;
         }
     }
