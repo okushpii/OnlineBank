@@ -17,9 +17,9 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class LessLimitSumValidationStrategyTest {
 
-    private static final int SUM = 1000;
+    private static final BigDecimal SUM = BigDecimal.valueOf(1000);
     private static final String LIMIT = "20000";
-    private static final int INVALID_SUM = 20000;
+    private static final BigDecimal INVALID_SUM = BigDecimal.valueOf(20000);
     private static final String ERROR_MESSAGE = "Error message";
 
     @InjectMocks
@@ -37,13 +37,13 @@ public class LessLimitSumValidationStrategyTest {
 
     @Test
     public void shouldValidateSum() {
-        testedInstance.validate(BigDecimal.valueOf(SUM));
+        testedInstance.validate(SUM);
     }
 
     @Test(expected = AccountsOperationException.class)
     public void shouldValidateSumWhenSumIsBiggerThenLimit() {
         when(i18Service.getLocalizedValue("sum.is.bigger.then.limit.message")).thenReturn(ERROR_MESSAGE);
 
-        testedInstance.validate(BigDecimal.valueOf(INVALID_SUM));
+        testedInstance.validate(INVALID_SUM);
     }
 }

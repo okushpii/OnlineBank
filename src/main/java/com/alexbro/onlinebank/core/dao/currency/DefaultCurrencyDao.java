@@ -25,7 +25,7 @@ public class DefaultCurrencyDao implements CurrencyDao {
     }
 
     @Override
-    public Optional<Currency> getByCode(String code) {
+    public Optional<Currency> findByCode(String code) {
         return sessionProvider.getSession().createQuery(GET_BY_CODE_QUERY, Currency.class).
                 setParameter("code", code).uniqueResultOptional();
     }

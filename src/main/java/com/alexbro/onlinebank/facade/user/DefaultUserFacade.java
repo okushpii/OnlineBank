@@ -19,7 +19,7 @@ public class DefaultUserFacade implements UserFacade {
     private Converter<User, UserData> userConverter;
 
     @Override
-    public Optional<UserData> getByCode(String code) {
-        return userService.getByCode(code).map(u -> userConverter.convert(u));
+    public Optional<UserData> findByCode(String code) {
+        return userService.findByCode(code).map(u -> userConverter.convert(u));
     }
 }

@@ -19,13 +19,13 @@ public class DefaultUserDao implements UserDao{
 
     @Transactional
     @Override
-    public Optional<User> getByUsername(String username) {
+    public Optional<User> findByUsername(String username) {
         return sessionProvider.getSession().createQuery(GET_USER_BY_USERNAME_QUERY, User.class).setParameter("username", username).
                 uniqueResultOptional();
     }
 
     @Override
-    public Optional<User> getByCode(String code) {
+    public Optional<User> findByCode(String code) {
         return sessionProvider.getSession().createQuery(GET_USER_BY_ID_QUERY, User.class).setParameter("code", code).
                 uniqueResultOptional();
     }

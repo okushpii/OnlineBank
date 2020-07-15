@@ -33,12 +33,12 @@ public class DefaultUserFacadeTest {
     private User user;
 
     @Test
-    public void shouldGetUserById(){
+    public void shouldFindByCode(){
         UserData userData = new UserData();
-        when(userService.getByCode(USER_CODE)).thenReturn(Optional.of(user));
+        when(userService.findByCode(USER_CODE)).thenReturn(Optional.of(user));
         when(userConverter.convert(user)).thenReturn(userData);
 
-        Optional<UserData> result = testedEntry.getByCode(USER_CODE);
+        Optional<UserData> result = testedEntry.findByCode(USER_CODE);
 
         assertEquals(Optional.of(userData), result);
     }

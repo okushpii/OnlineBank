@@ -5,6 +5,7 @@ import com.alexbro.onlinebank.core.entity.Account;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,5 +28,13 @@ public class DefaultAccountService implements AccountService {
     @Override
     public List<Account> findAllByCurrency(String currencyCode) {
         return accountDao.findAllByCurrency(currencyCode);
+    }
+
+    @Override
+    public void transfer(Account from, Account to, BigDecimal sum) {
+        from.setMoney(from.getMoney().subtract(sum));
+        to.setMoney(to.getMoney().add(sum));
+        accountDao.update(from);
+        accountDao.update(to);
     }
 }

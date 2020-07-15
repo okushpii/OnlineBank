@@ -22,7 +22,7 @@ public class AccountPopulatorTest {
 
     private static final String ACCOUNT_CODE = "a1";
     private static final Long CARD_NUMBER = 424223L;
-    private static int MONEY = 10223;
+    private static BigDecimal MONEY = BigDecimal.valueOf(10223);
 
     @InjectMocks
     private AccountPopulator testedInstance;
@@ -48,14 +48,14 @@ public class AccountPopulatorTest {
 
         assertEquals(ACCOUNT_CODE, accountData.getCode());
         assertEquals(CARD_NUMBER, accountData.getCardNumber());
-        assertEquals(BigDecimal.valueOf(MONEY), accountData.getMoney());
+        assertEquals(MONEY, accountData.getMoney());
         assertEquals(currencyData, accountData.getCurrency());
     }
 
     private void prepareFields(){
         when(account.getCode()).thenReturn(ACCOUNT_CODE);
         when(account.getCardNumber()).thenReturn(CARD_NUMBER);
-        when(account.getMoney()).thenReturn(BigDecimal.valueOf(MONEY));
+        when(account.getMoney()).thenReturn(MONEY);
         when(account.getCurrency()).thenReturn(currency);
         when(currencyConverter.convert(currency)).thenReturn(currencyData);
 

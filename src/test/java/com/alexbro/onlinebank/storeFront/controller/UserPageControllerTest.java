@@ -33,7 +33,7 @@ public class UserPageControllerTest {
     @Test
     public void shouldGetUserPage(){
         UserData userData = new UserData();
-        when(userFacade.getByCode(USER_CODE)).thenReturn(Optional.of(userData));
+        when(userFacade.findByCode(USER_CODE)).thenReturn(Optional.of(userData));
 
         String result = testedEntry.getUserPage(USER_CODE, model);
 

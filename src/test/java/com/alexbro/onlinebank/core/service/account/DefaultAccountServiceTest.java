@@ -9,10 +9,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -21,6 +23,9 @@ public class DefaultAccountServiceTest {
     private static final String ACCOUNT_CODE = "a1";
     private static final Long CARD_NUMBER = 123345L;
     private static final String CURRENCY_CODE = "c1";
+    private static final BigDecimal SUM = BigDecimal.valueOf(500);
+    private static final BigDecimal ACCOUNT_FROM_MONEY = BigDecimal.valueOf(5000);
+    private static final BigDecimal ACCOUNT_TO_MONEY = BigDecimal.valueOf(1000);
 
     @InjectMocks
     private DefaultAccountService testedEntry;
@@ -31,6 +36,12 @@ public class DefaultAccountServiceTest {
     @Mock
     private Account account;
 
+    @Mock
+    private Account accountFrom;
+
+    @Mock
+    private Account accountTo;
+
     @Before
     public void setUp() {
         when(accountDao.findByCode(ACCOUNT_CODE)).thenReturn(Optional.of(account));
@@ -39,14 +50,14 @@ public class DefaultAccountServiceTest {
     }
 
     @Test
-    public void shouldGetAccountByCode() {
+    public void shouldFindByCode() {
         Optional<Account> result = testedEntry.findByCode(ACCOUNT_CODE);
 
         assertEquals(Optional.of(account), result);
     }
 
     @Test
-    public void shouldGetAccountByCardNumber() {
+    public void shouldFindByCardNumber() {
         Optional<Account> result = testedEntry.findByCardNumber(CARD_NUMBER);
 
         assertEquals(Optional.of(account), result);
@@ -57,5 +68,18 @@ public class DefaultAccountServiceTest {
         List<Account> result = testedEntry.findAllByCurrency(CURRENCY_CODE);
 
         assertEquals(List.of(account), result);
+    }
+
+    @Test
+    public void shouldTransfer() {
+        when(accountFrom.getMoney()).thenReturn(ACCOUNT_FROM_MONEY);
+        when(accountTo.getMoney()).thenReturn(ACCOUNT_TO_MONEY);
+
+        testedEntry.transfer(accountFrom, accountTo, SUM);
+
+        verify(accountFrom).setMoney(BigDecimal.valueOf(4500));
+        verify(accountTo).setMoney(BigDecimal.valueOf(1500));
+        verify(accountDao).update(accountFrom);
+        verify(accountDao).update(accountTo);
     }
 }

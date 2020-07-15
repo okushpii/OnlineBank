@@ -16,7 +16,7 @@
                 <label><spring:message key="currency"/></label>
             </div>
             <div class="col-md-6">
-                <p>${accountFrom.currency.name}</p>
+                <p>${exchange.accountFrom.currency.name}</p>
             </div>
         </div>
 
@@ -25,7 +25,7 @@
                 <label><spring:message key="card.number"/></label>
             </div>
             <div class="col-md-6">
-                <p>${accountFrom.cardNumber}</p>
+                <p>${exchange.accountFrom.cardNumber}</p>
             </div>
         </div>
 
@@ -34,7 +34,7 @@
                 <label><spring:message key="balance"/></label>
             </div>
             <div class="col-md-6">
-                <p>${balanceFrom} - ${sum} = ${balanceAfterFrom}</p>
+                <p>${exchange.balanceFrom} - ${exchange.sum} = ${exchange.balanceAfterFrom}</p>
             </div>
         </div>
 
@@ -47,7 +47,7 @@
                 <label><spring:message key="currency"/></label>
             </div>
             <div class="col-md-6">
-                <p>${accountTo.currency.name}</p>
+                <p>${exchange.accountTo.currency.name}</p>
             </div>
         </div>
 
@@ -56,7 +56,7 @@
                 <label><spring:message key="card.number"/></label>
             </div>
             <div class="col-md-6">
-                <p>${accountTo.cardNumber}</p>
+                <p>${exchange.accountTo.cardNumber}</p>
             </div>
         </div>
 
@@ -65,7 +65,7 @@
                 <label><spring:message key="balance"/></label>
             </div>
             <div class="col-md-6">
-                <p>${balanceTo} + ${sumAfter} = ${balanceAfterTo}</p>
+                <p>${exchange.balanceTo} + ${exchange.sumAfter} = ${exchange.balanceAfterTo}</p>
             </div>
         </div>
 

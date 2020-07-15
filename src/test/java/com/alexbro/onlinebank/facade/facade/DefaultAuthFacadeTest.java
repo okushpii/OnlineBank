@@ -58,7 +58,7 @@ public class DefaultAuthFacadeTest {
         when(encodePasswordService.encodePassword(NOT_ENCODED_USER_PASSWORD)).thenReturn(ENCODED_USER_PASSWORD);
         when(authTokenService.generateToken(USER_NAME, ENCODED_USER_PASSWORD)).thenReturn(AUTHENTICATION_TOKEN);
         when(authDataFactory.create(user, AUTHENTICATION_TOKEN)).thenReturn(authData);
-        when(userService.getByUsername(USER_NAME)).thenReturn(Optional.of(user));
+        when(userService.findByUsername(USER_NAME)).thenReturn(Optional.of(user));
     }
 
     @Test
@@ -72,7 +72,7 @@ public class DefaultAuthFacadeTest {
 
     @Test(expected = RuntimeException.class)
     public void shouldAuthoriseWhenUserIsEmpty() {
-        when(userService.getByUsername(USER_NAME)).thenReturn(Optional.empty());
+        when(userService.findByUsername(USER_NAME)).thenReturn(Optional.empty());
 
         testedEntry.authorize(USER_NAME, NOT_ENCODED_USER_PASSWORD);
     }

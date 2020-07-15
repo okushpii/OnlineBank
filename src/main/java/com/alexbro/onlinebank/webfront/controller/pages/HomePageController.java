@@ -22,8 +22,8 @@ public class HomePageController {
     @GetMapping
     public String getHomePage(Model model, HttpServletRequest request) {
         Optional<AuthData> authData = Optional.ofNullable((AuthData) request.getSession().getAttribute(WebConstants.SessionAttributes.AUTH_DATA));
-        authData.ifPresent(ad -> userFacade.getByCode(ad.getUserCode())
-                .ifPresent(u -> model.addAttribute(WebConstants.RequestAttributes.USER, u)));
+        authData.flatMap(ad -> userFacade.findByCode(ad.getUserCode()))
+                .ifPresent(u -> model.addAttribute(WebConstants.RequestAttributes.USER, u));
         return WebConstants.Pages.HOME;
     }
 }

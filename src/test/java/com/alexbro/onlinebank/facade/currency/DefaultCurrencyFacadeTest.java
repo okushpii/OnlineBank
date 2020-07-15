@@ -74,7 +74,7 @@ public class DefaultCurrencyFacadeTest {
     }
 
     @Test
-    public void shouldGetByCode() {
+    public void shouldFindByCode() {
         CurrencyData currencyData = new CurrencyData();
         when(currencyService.findByCode(CURRENCY_CODE)).thenReturn(Optional.of(currency1));
         when(currencyConverter.convert(currency1)).thenReturn(currencyData);

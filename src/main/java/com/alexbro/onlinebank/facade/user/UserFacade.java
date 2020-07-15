@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface UserFacade {
 
-    Optional<UserData> getByCode(String code);
+    Optional<UserData> findByCode(String code);
 }

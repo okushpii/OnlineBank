@@ -18,7 +18,7 @@ public class CurrencyPopulatorTest {
 
     private static final String CURRENCY_CODE = "c1";
     private static final String CURRENCY_NAME = "dollar";
-    private static double CURRENCY_RATE = 1.5;
+    private static BigDecimal CURRENCY_RATE = BigDecimal.valueOf(1.5);
 
     @InjectMocks
     private CurrencyPopulator testedInstance;
@@ -27,7 +27,7 @@ public class CurrencyPopulatorTest {
     private Currency currency;
 
     @Test
-    public void shouldPopulate(){
+    public void shouldPopulate() {
         CurrencyData currencyData = new CurrencyData();
         prepareFields();
 
@@ -35,12 +35,12 @@ public class CurrencyPopulatorTest {
 
         assertEquals(CURRENCY_CODE, currencyData.getCode());
         assertEquals(CURRENCY_NAME, currencyData.getName());
-        assertEquals(BigDecimal.valueOf(CURRENCY_RATE), currencyData.getRate());
+        assertEquals(CURRENCY_RATE, currencyData.getRate());
     }
 
-    private void prepareFields(){
+    private void prepareFields() {
         when(currency.getCode()).thenReturn(CURRENCY_CODE);
         when(currency.getName()).thenReturn(CURRENCY_NAME);
-        when(currency.getRate()).thenReturn(BigDecimal.valueOf(CURRENCY_RATE));
+        when(currency.getRate()).thenReturn(CURRENCY_RATE);
     }
 }

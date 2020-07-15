@@ -61,7 +61,7 @@ public class ExchangeStepOnePageControllerTest {
         currencies = new ArrayList<>();
         when(request.getSession()).thenReturn(session);
         when(session.getAttribute("authData")).thenReturn(authData);
-        when(userFacade.getByCode(USER_CODE)).thenReturn(Optional.of(userData));
+        when(userFacade.findByCode(USER_CODE)).thenReturn(Optional.of(userData));
     }
 
     @Test

@@ -15,8 +15,8 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class BiggerZeroSumValidationStrategyTest {
 
-    private static final int SUM = 1000;
-    private static final int INVALID_SUM = -1000;
+    private static final BigDecimal SUM = BigDecimal.valueOf(1000);
+    private static final BigDecimal INVALID_SUM = BigDecimal.valueOf(-1000);
     private static final String ERROR_MESSAGE = "Error message";
 
     @InjectMocks
@@ -27,13 +27,13 @@ public class BiggerZeroSumValidationStrategyTest {
 
     @Test
     public void validateSum() {
-        testedInstance.validate(BigDecimal.valueOf(SUM));
+        testedInstance.validate(SUM);
     }
 
     @Test(expected = AccountsOperationException.class)
     public void validateSumWhenSumLessThenNull() {
         when(i18Service.getLocalizedValue("invalid.sum.message")).thenReturn(ERROR_MESSAGE);
 
-        testedInstance.validate(BigDecimal.valueOf(INVALID_SUM));
+        testedInstance.validate(INVALID_SUM);
     }
 }
