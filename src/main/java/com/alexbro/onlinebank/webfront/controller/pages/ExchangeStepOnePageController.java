@@ -1,7 +1,7 @@
 package com.alexbro.onlinebank.webfront.controller.pages;
 
 import com.alexbro.onlinebank.auth.facade.data.AuthData;
-import com.alexbro.onlinebank.facade.exception.CurrencyException;
+import com.alexbro.onlinebank.core.exception.AccountsOperationException;
 import com.alexbro.onlinebank.facade.currency.CurrencyFacade;
 import com.alexbro.onlinebank.facade.user.UserFacade;
 import com.alexbro.onlinebank.webfront.WebConstants;
@@ -27,7 +27,7 @@ public class ExchangeStepOnePageController {
     @Resource
     private UserFacade userFacade;
 
-    private Logger logger = LoggerFactory.getLogger(ExchangeStepTwoPageController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ExchangeStepTwoPageController.class);
 
     @GetMapping
     public String getExchangeStepOnePage(HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
@@ -36,9 +36,9 @@ public class ExchangeStepOnePageController {
             authData.flatMap(ad -> userFacade.findByCode(ad.getUserCode())).ifPresent(u -> model.
                     addAttribute(WebConstants.RequestAttributes.CURRENCIES, currencyFacade.findAllByUser(u.getCode())));
             return WebConstants.Pages.EXCHANGE_STEP_ONE;
-        } catch (CurrencyException e) {
+        } catch (AccountsOperationException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
-            logger.info(e.getMessage(), e);
+            LOG.info(e.getMessage(), e);
             return WebConstants.Util.REDIRECT + WebConstants.Mapping.USER + "/" + authData.get().getUserCode();
         }
     }

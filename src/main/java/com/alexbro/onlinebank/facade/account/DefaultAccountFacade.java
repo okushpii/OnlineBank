@@ -1,13 +1,18 @@
 package com.alexbro.onlinebank.facade.account;
 
 import com.alexbro.onlinebank.core.entity.Account;
+import com.alexbro.onlinebank.core.service.account.AccountCalculationService;
 import com.alexbro.onlinebank.core.service.account.AccountService;
+import com.alexbro.onlinebank.core.service.currency.CurrencyService;
 import com.alexbro.onlinebank.core.service.i18service.I18Service;
+import com.alexbro.onlinebank.core.service.validation.CurrencyValidationService;
 import com.alexbro.onlinebank.core.service.validation.SumValidationService;
 import com.alexbro.onlinebank.facade.FacadeConstants;
 import com.alexbro.onlinebank.core.exception.AccountsOperationException;
 import com.alexbro.onlinebank.facade.converter.utill.Converter;
 import com.alexbro.onlinebank.facade.data.account.AccountData;
+import com.alexbro.onlinebank.facade.data.exchange.ExchangeData;
+import com.alexbro.onlinebank.facade.data.factory.ExchangeDataFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -25,9 +30,18 @@ public class DefaultAccountFacade implements AccountFacade {
     @Resource
     private I18Service i18Service;
     @Resource
+    private CurrencyService currencyService;
+
+    @Resource
+    private AccountCalculationService accountCalculationService;
+    @Resource
     private SumValidationService sumValidationService;
     @Resource
     private Converter<Account, AccountData> accountConverter;
+    @Resource
+    private ExchangeDataFactory exchangeDataFactory;
+    @Resource
+    private CurrencyValidationService currencyValidationService;
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAccountFacade.class);
 
@@ -64,6 +78,49 @@ public class DefaultAccountFacade implements AccountFacade {
     @Override
     public Optional<AccountData> findByCardNumber(Long cardNumber) {
         return accountService.findByCardNumber(cardNumber).map(a -> accountConverter.convert(a));
+    }
+
+    @Override
+    public ExchangeData getExchangeData(AccountData accountFrom, AccountData accountTo, BigDecimal sum) {
+        sumValidationService.validate(sum);
+        validateAccountFromMoney(accountFrom.getMoney(), sum);
+        BigDecimal sumAfter = accountCalculationService.calculateSumAfterExchange(sum, accountFrom.getCurrency().
+                getRate(), accountTo.getCurrency().getRate());
+
+        BigDecimal balanceAfterFrom = accountCalculationService.calculateBalanceWithDelta(accountFrom.getMoney(), sum.negate());
+
+        BigDecimal balanceAfterTo = accountCalculationService.calculateBalanceWithDelta(accountTo.getMoney(), sumAfter);
+
+        return exchangeDataFactory.create(accountFrom,
+                accountTo,
+                sum,
+                sumAfter,
+                accountFrom.getMoney(),
+                accountTo.getMoney(),
+                balanceAfterFrom, balanceAfterTo);
+    }
+
+    @Override
+    public void exchange(String accountFromCode, String accountToCode, BigDecimal sum) {
+        sumValidationService.validate(sum);
+        Account accountFrom = accountService.findByCode(accountFromCode).orElseThrow();
+        validateAccountFromMoney(accountFrom.getMoney(), sum);
+
+        currencyValidationService.validateCurrenciesSize(currencyService.findAllByUser(accountFrom.getUser().getCode()));
+
+        Account accountTo = accountService.findByCode(accountToCode).orElseThrow();
+
+        currencyValidationService.validateCurrenciesMatches(accountFrom.getCurrency(), accountTo.getCurrency());
+
+        BigDecimal sumAfterExchange = accountCalculationService.calculateSumAfterExchange(sum, accountFrom.
+                getCurrency().getRate(), accountTo.getCurrency().getRate());
+
+        LOG.info("Exchange start from currency:" + accountFrom.getCurrency().getName()
+                + " to currency:" + accountTo.getCurrency().getName() + " From card:" + accountFrom.getCardNumber() + " to card:" +
+                accountTo.getCardNumber());
+
+        accountService.exchange(accountFrom, accountTo, sum, sumAfterExchange);
+        LOG.info("Exchange is success");
     }
 
     private void validateAccountFromMoney(BigDecimal accountFromMoney, BigDecimal sum) {
