@@ -15,4 +15,6 @@ public interface AccountService {
     List<Account> findAllByCurrency(String currencyCode);
 
     void transfer(Account from, Account to, BigDecimal sum);
+
+    void exchange(Account from, Account to, BigDecimal sumBeforeExchange, BigDecimal sumAfterExchange);
 }

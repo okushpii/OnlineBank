@@ -41,4 +41,20 @@ public class AccountController {
             return WebConstants.Util.REDIRECT + WebConstants.Mapping.TRANSFER;
         }
     }
+
+    @PostMapping("/exchange")
+    public String exchange(@RequestParam String accountFromCode, @RequestParam String accountToCode,
+                           @RequestParam BigDecimal sum, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        AuthData authData = (AuthData) request.getSession().
+                getAttribute(WebConstants.SessionAttributes.AUTH_DATA);
+        try {
+            String userCode = authData.getUserCode();
+            accountFacade.exchange(accountFromCode, accountToCode, sum);
+            return WebConstants.Util.REDIRECT + WebConstants.Mapping.USER + "/" + userCode;
+        } catch (AccountsOperationException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            LOG.info(e.getMessage(), e);
+            return WebConstants.Util.REDIRECT + WebConstants.Mapping.EXCHANGE_STEP_ONE;
+        }
+    }
 }

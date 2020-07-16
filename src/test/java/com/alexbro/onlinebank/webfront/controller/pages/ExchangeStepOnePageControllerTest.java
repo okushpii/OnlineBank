@@ -1,10 +1,10 @@
 package com.alexbro.onlinebank.webfront.controller.pages;
 
 import com.alexbro.onlinebank.auth.facade.data.AuthData;
+import com.alexbro.onlinebank.core.exception.AccountsOperationException;
 import com.alexbro.onlinebank.facade.currency.CurrencyFacade;
 import com.alexbro.onlinebank.facade.data.currency.CurrencyData;
 import com.alexbro.onlinebank.facade.data.user.UserData;
-import com.alexbro.onlinebank.facade.exception.CurrencyException;
 import com.alexbro.onlinebank.facade.user.UserFacade;
 import org.junit.Before;
 import org.junit.Test;
@@ -83,8 +83,8 @@ public class ExchangeStepOnePageControllerTest {
     }
 
     @Test
-    public void shouldGetFirstStepOfExchangePageWhenThrowCurrencyException(){
-        doThrow(new CurrencyException(ERROR_MESSAGE)).when(model).addAttribute("currencies", currencies);
+    public void shouldGetFirstStepOfExchangePageWhenThrowAccountsOperationException() {
+        doThrow(new AccountsOperationException(ERROR_MESSAGE)).when(model).addAttribute("currencies", currencies);
 
         String result = testedInstance.getExchangeStepOnePage(request, model, redirectAttributes);
 

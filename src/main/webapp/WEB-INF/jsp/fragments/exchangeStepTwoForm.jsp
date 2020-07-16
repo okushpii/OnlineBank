@@ -15,7 +15,7 @@
 
             <label class="control-label"><spring:message key="account.from"/> ${currencyFrom.name}</label>
             <div class="controls">
-                <select class="form-control" name="accountCode">
+                <select class="form-control" name="accountFromCode">
                     <c:forEach var="account" items="${accountsFrom}">
                         <option value="${account.code}">${account.cardNumber}</option>
                     </c:forEach>
@@ -26,9 +26,9 @@
         <div class="form-group">
             <label class="control-label"><spring:message key="account.to"/> ${currencyTo.name}</label>
             <div class="controls">
-                <select class="form-control" name="cardNumber">
+                <select class="form-control" name="accountToCode">
                     <c:forEach var="account" items="${accountsTo}">
-                        <option value="${account.cardNumber}">${account.cardNumber}</option>
+                        <option value="${account.code}">${account.cardNumber}</option>
                     </c:forEach>
                 </select>
             </div>

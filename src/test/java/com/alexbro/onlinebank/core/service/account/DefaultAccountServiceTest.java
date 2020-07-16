@@ -24,6 +24,7 @@ public class DefaultAccountServiceTest {
     private static final Long CARD_NUMBER = 123345L;
     private static final String CURRENCY_CODE = "c1";
     private static final BigDecimal SUM = BigDecimal.valueOf(500);
+    private static final BigDecimal SUM_AFTER_EXCHANGE = BigDecimal.valueOf(1000);
     private static final BigDecimal ACCOUNT_FROM_MONEY = BigDecimal.valueOf(5000);
     private static final BigDecimal ACCOUNT_TO_MONEY = BigDecimal.valueOf(1000);
 
@@ -47,6 +48,8 @@ public class DefaultAccountServiceTest {
         when(accountDao.findByCode(ACCOUNT_CODE)).thenReturn(Optional.of(account));
         when(accountDao.findByCardNumber(CARD_NUMBER)).thenReturn(Optional.of(account));
         when(accountDao.findAllByCurrency(CURRENCY_CODE)).thenReturn(List.of(account));
+        when(accountFrom.getMoney()).thenReturn(ACCOUNT_FROM_MONEY);
+        when(accountTo.getMoney()).thenReturn(ACCOUNT_TO_MONEY);
     }
 
     @Test
@@ -72,13 +75,20 @@ public class DefaultAccountServiceTest {
 
     @Test
     public void shouldTransfer() {
-        when(accountFrom.getMoney()).thenReturn(ACCOUNT_FROM_MONEY);
-        when(accountTo.getMoney()).thenReturn(ACCOUNT_TO_MONEY);
-
         testedEntry.transfer(accountFrom, accountTo, SUM);
 
         verify(accountFrom).setMoney(BigDecimal.valueOf(4500));
         verify(accountTo).setMoney(BigDecimal.valueOf(1500));
+        verify(accountDao).update(accountFrom);
+        verify(accountDao).update(accountTo);
+    }
+
+    @Test
+    public void shouldExchange() {
+        testedEntry.exchange(accountFrom, accountTo, SUM, SUM_AFTER_EXCHANGE);
+
+        verify(accountFrom).setMoney(BigDecimal.valueOf(4500));
+        verify(accountTo).setMoney(BigDecimal.valueOf(2000));
         verify(accountDao).update(accountFrom);
         verify(accountDao).update(accountTo);
     }
