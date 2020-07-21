@@ -52,7 +52,7 @@ public class DefaultAccountFacade implements AccountFacade {
                 orElseThrow(() -> new AccountsOperationException(i18Service.getLocalizedValue(FacadeConstants.
                         ACCOUNT_IS_NOT_FOUND_MESSAGE)));
 
-        validateAccountFromMoney(accountFrom.getMoney(), sum);
+        sumValidationService.validateAccountFromMoney(accountFrom.getMoney(), sum);
 
         Account accountTo = accountService.findByCardNumber(cardNumber).
                 orElseThrow(() -> new AccountsOperationException(i18Service.
@@ -82,8 +82,6 @@ public class DefaultAccountFacade implements AccountFacade {
 
     @Override
     public ExchangeData getExchangeData(AccountData accountFrom, AccountData accountTo, BigDecimal sum) {
-        sumValidationService.validate(sum);
-        validateAccountFromMoney(accountFrom.getMoney(), sum);
         BigDecimal sumAfter = accountCalculationService.calculateSumAfterExchange(sum, accountFrom.getCurrency().
                 getRate(), accountTo.getCurrency().getRate());
 
@@ -104,7 +102,7 @@ public class DefaultAccountFacade implements AccountFacade {
     public void exchange(String accountFromCode, String accountToCode, BigDecimal sum) {
         sumValidationService.validate(sum);
         Account accountFrom = accountService.findByCode(accountFromCode).orElseThrow();
-        validateAccountFromMoney(accountFrom.getMoney(), sum);
+        sumValidationService.validateAccountFromMoney(accountFrom.getMoney(), sum);
 
         currencyValidationService.validateCurrenciesSize(currencyService.findAllByUser(accountFrom.getUser().getCode()));
 
@@ -121,11 +119,5 @@ public class DefaultAccountFacade implements AccountFacade {
 
         accountService.exchange(accountFrom, accountTo, sum, sumAfterExchange);
         LOG.info("Exchange is success");
-    }
-
-    private void validateAccountFromMoney(BigDecimal accountFromMoney, BigDecimal sum) {
-        if (accountFromMoney.subtract(sum).compareTo(BigDecimal.ZERO) < 0) {
-            throw new AccountsOperationException(i18Service.getLocalizedValue(FacadeConstants.ACCOUNTS_OPERATION_MESSAGE));
-        }
     }
 }
