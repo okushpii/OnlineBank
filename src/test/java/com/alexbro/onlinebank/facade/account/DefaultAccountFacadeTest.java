@@ -95,7 +95,7 @@ public class DefaultAccountFacadeTest {
         when(accountService.findByCode(ACCOUNT_TO_CODE)).thenReturn(Optional.of(accountTo));
         when(accountService.findByCardNumber(CARD_NUMBER)).thenReturn(Optional.of(accountTo));
         when(accountCalculationService.calculateSumAfterExchange(SUM, CURRENT_RATE, EXCHANGE_RATE)).thenReturn(SUM_AFTER);
-        when(accountFrom.getMoney()).thenReturn(BigDecimal.valueOf(5000));
+        when(accountFrom.getMoney()).thenReturn(BALANCE_FROM);
         when(accountFrom.getUser()).thenReturn(user);
         when(user.getCode()).thenReturn(USER_CODE);
         when(currencyService.findAllByUser(USER_CODE)).thenReturn(currencies);
@@ -106,6 +106,7 @@ public class DefaultAccountFacadeTest {
         testedInstance.transfer(ACCOUNT_CODE, CARD_NUMBER, SUM);
 
         verify(sumValidationService).validate(SUM);
+        verify(sumValidationService).validateAccountFromMoney(BALANCE_FROM, SUM);
         verify(accountService).transfer(accountFrom, accountTo, SUM);
     }
 
@@ -121,14 +122,6 @@ public class DefaultAccountFacadeTest {
     public void shouldTransferWhenAccountToIsAbsent() {
         when(accountService.findByCardNumber(CARD_NUMBER)).thenReturn(Optional.empty());
         when(i18Service.getLocalizedValue("card.number.not.found.message")).thenReturn(ERROR_MESSAGE);
-
-        testedInstance.transfer(ACCOUNT_CODE, CARD_NUMBER, SUM);
-    }
-
-    @Test(expected = AccountsOperationException.class)
-    public void shouldTransferWhenInsufficientFound() {
-        when(accountFrom.getMoney()).thenReturn(BigDecimal.valueOf(500));
-        when(i18Service.getLocalizedValue("accounts.operation.message")).thenReturn(ERROR_MESSAGE);
 
         testedInstance.transfer(ACCOUNT_CODE, CARD_NUMBER, SUM);
     }
@@ -172,16 +165,7 @@ public class DefaultAccountFacadeTest {
 
         ExchangeData result = testedInstance.getExchangeData(accountFromData, accountToData, SUM);
 
-        verify(sumValidationService).validate(SUM);
         assertEquals(exchangeData, result);
-    }
-
-    @Test(expected = AccountsOperationException.class)
-    public void shouldGetExchangeDataWhenInsufficientFound(){
-        accountFromData.setMoney(BigDecimal.valueOf(500));
-        when(i18Service.getLocalizedValue("accounts.operation.message")).thenReturn(ERROR_MESSAGE);
-
-        testedInstance.getExchangeData(accountFromData, accountToData, SUM);
     }
 
     @Test
@@ -196,15 +180,8 @@ public class DefaultAccountFacadeTest {
         verify(currencyValidationService).validateCurrenciesSize(currencies);
         verify(currencyValidationService).validateCurrenciesMatches(currencyFrom, currencyTo);
         verify(sumValidationService).validate(SUM);
+        verify(sumValidationService).validateAccountFromMoney(BALANCE_FROM, SUM);
         verify(accountService).exchange(accountFrom, accountTo, SUM, SUM_AFTER);
-    }
-
-    @Test(expected = AccountsOperationException.class)
-    public void shouldExchangeWhenInsufficientFound(){
-        when(accountFrom.getMoney()).thenReturn(BigDecimal.valueOf(500));
-        when(i18Service.getLocalizedValue("accounts.operation.message")).thenReturn(ERROR_MESSAGE);
-
-        testedInstance.exchange(ACCOUNT_CODE, ACCOUNT_TO_CODE, SUM);
     }
 
     private void setAccountsData() {

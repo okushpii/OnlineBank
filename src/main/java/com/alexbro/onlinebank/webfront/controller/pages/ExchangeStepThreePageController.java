@@ -2,6 +2,7 @@ package com.alexbro.onlinebank.webfront.controller.pages;
 
 import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.core.exception.AccountsOperationException;
+import com.alexbro.onlinebank.core.service.validation.SumValidationService;
 import com.alexbro.onlinebank.facade.account.AccountFacade;
 import com.alexbro.onlinebank.facade.data.account.AccountData;
 import com.alexbro.onlinebank.facade.data.exchange.ExchangeData;
@@ -29,6 +30,8 @@ public class ExchangeStepThreePageController {
     private AccountFacade accountFacade;
     @Resource
     private UserFacade userFacade;
+    @Resource
+    private SumValidationService sumValidationService;
 
     private static final Logger LOG = LoggerFactory.getLogger(ExchangeStepTwoPageController.class);
 
@@ -39,6 +42,8 @@ public class ExchangeStepThreePageController {
         AccountData accountFrom = accountFacade.findByCode(accountFromCode).orElseThrow();
         AccountData accountTo = accountFacade.findByCode(accountToCode).orElseThrow();
         try {
+            sumValidationService.validate(sum);
+            sumValidationService.validateAccountFromMoney(accountFrom.getMoney(), sum);
             ExchangeData exchangeData = accountFacade.getExchangeData(accountFrom, accountTo, sum);
             authData.flatMap(ad -> userFacade.findByCode(ad.getUserCode())).ifPresent(u -> model.
                     addAttribute(WebConstants.RequestAttributes.EXCHANGE, exchangeData));

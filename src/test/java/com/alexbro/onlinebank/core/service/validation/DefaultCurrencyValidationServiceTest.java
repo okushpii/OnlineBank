@@ -40,7 +40,6 @@ public class DefaultCurrencyValidationServiceTest {
     public void validateCurrenciesSizeWhenSizeOfCurrenciesLessThenTwo() {
         when(currencies.size()).thenReturn(1);
 
-
         testedInstance.validateCurrenciesSize(currencies);
     }
 
@@ -51,6 +50,8 @@ public class DefaultCurrencyValidationServiceTest {
 
     @Test(expected = AccountsOperationException.class)
     public void validateCurrenciesMatchesWhenCurrenciesMatches() {
+        when(i18Service.getLocalizedValue("currencies.matches")).thenReturn("error");
+
         testedInstance.validateCurrenciesMatches(currencyFrom, currencyFrom);
     }
 }

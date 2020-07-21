@@ -2,6 +2,7 @@ package com.alexbro.onlinebank.webfront.controller.pages;
 
 import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.core.exception.AccountsOperationException;
+import com.alexbro.onlinebank.core.service.validation.SumValidationService;
 import com.alexbro.onlinebank.facade.account.AccountFacade;
 import com.alexbro.onlinebank.facade.data.account.AccountData;
 import com.alexbro.onlinebank.facade.data.currency.CurrencyData;
@@ -33,6 +34,7 @@ public class ExchangeStepThreePageControllerTest {
     private static final String ACCOUNT_TO_CODE = "a2";
     private static final String CURRENCY_FROM_CODE = "c1";
     private static final String CURRENCY_TO_CODE = "c2";
+    private static BigDecimal BALANCE_FROM = BigDecimal.valueOf(1000);
     private static BigDecimal SUM = BigDecimal.valueOf(100);
     private static final String EXCHANGE_STEP_THREE_PAGE = "pages/exchangeStepThreePage";
     private static final String REDIRECT_TO_EXCHANGE_STEP_TWO_PAGE = "redirect:/exchangeStepTwo";
@@ -61,6 +63,8 @@ public class ExchangeStepThreePageControllerTest {
     private HttpServletRequest request;
     @Mock
     private HttpSession session;
+    @Mock
+    private SumValidationService sumValidationService;
 
     private UserData userData;
     private AuthData authData;
@@ -82,18 +86,21 @@ public class ExchangeStepThreePageControllerTest {
         when(accountTo.getCurrency()).thenReturn(currencyTo);
         when(currencyFrom.getCode()).thenReturn(CURRENCY_FROM_CODE);
         when(currencyTo.getCode()).thenReturn(CURRENCY_TO_CODE);
+        when(accountFrom.getMoney()).thenReturn(BALANCE_FROM);
     }
 
     @Test
     public void shouldGetExchangeStepThreePage() {
         String result = testedInstance.getExchangeStepThreePage(ACCOUNT_FROM_CODE, ACCOUNT_TO_CODE, SUM, model, redirectAttributes, request);
 
+        verify(sumValidationService).validate(SUM);
+        verify(sumValidationService).validateAccountFromMoney(BALANCE_FROM, SUM);
         verify(model).addAttribute("exchange", exchangeData);
         assertEquals(EXCHANGE_STEP_THREE_PAGE, result);
     }
 
     @Test
-    public void shouldGetExchangeStepThreePageWhenAuthDataIsAbsent(){
+    public void shouldGetExchangeStepThreePageWhenAuthDataIsAbsent() {
         when(session.getAttribute("authData")).thenReturn(null);
 
         testedInstance.getExchangeStepThreePage(ACCOUNT_FROM_CODE, ACCOUNT_TO_CODE, SUM, model, redirectAttributes, request);
