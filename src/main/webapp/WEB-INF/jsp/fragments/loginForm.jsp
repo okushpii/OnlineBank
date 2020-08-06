@@ -37,7 +37,7 @@
                             <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm"><spring:message key="login"/></button>
                         </div>
                         <div class="form-group">
-                            <p class="text-center"><spring:message key="have.not.account"/> <a href="#"><spring:message key="sing.up"/></a></p>
+                            <p class="text-center"><spring:message key="have.not.account"/> <a href="/registration"><spring:message key="sing.up"/></a></p>
                         </div>
                         <c:if test="${not empty error}">
                             <div class="alert alert-danger" role="alert">

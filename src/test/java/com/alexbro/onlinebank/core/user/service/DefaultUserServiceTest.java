@@ -12,6 +12,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -30,7 +31,7 @@ public class DefaultUserServiceTest {
     private User user;
 
     @Test
-    public void shouldFindByUserName(){
+    public void shouldFindByUserName() {
         when(userDao.findByUsername(USER_LOGIN)).thenReturn(Optional.of(user));
 
         Optional<User> result = testedEntry.findByUsername(USER_LOGIN);
@@ -39,11 +40,20 @@ public class DefaultUserServiceTest {
     }
 
     @Test
-    public void shouldFindByCode(){
+    public void shouldFindByCode() {
         when(userDao.findByCode(USER_CODE)).thenReturn(Optional.of(user));
 
         Optional<User> result = testedEntry.findByCode(USER_CODE);
 
         assertEquals(Optional.of(user), result);
+    }
+
+    @Test
+    public void shouldRegister() {
+        User user = new User();
+
+        testedEntry.register(user);
+
+        verify(userDao).register(user);
     }
 }

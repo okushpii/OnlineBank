@@ -29,4 +29,9 @@ public class DefaultUserDao implements UserDao{
         return sessionProvider.getSession().createQuery(GET_USER_BY_ID_QUERY, User.class).setParameter("code", code).
                 uniqueResultOptional();
     }
+
+    @Override
+    public void register(User user) {
+        sessionProvider.getSession().save(user);
+    }
 }

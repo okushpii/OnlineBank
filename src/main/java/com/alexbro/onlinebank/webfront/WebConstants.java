@@ -13,6 +13,7 @@ public interface WebConstants {
         String EXCHANGE_STEP_ONE = "/exchangeStepOne";
         String EXCHANGE_STEP_TWO = "/exchangeStepTwo";
         String EXCHANGE_STEP_THREE = "/exchangeStepThree";
+        String REGISTRATION = "/registration";
     }
 
     interface RequestAttributes {
@@ -25,6 +26,7 @@ public interface WebConstants {
         String CURRENCY_FROM = "currencyFrom";
         String CURRENCY_TO = "currencyTo";
         String EXCHANGE = "exchange";
+        String REGISTER = "registerData";
     }
 
     interface SessionAttributes {
@@ -39,6 +41,7 @@ public interface WebConstants {
         String EXCHANGE_STEP_ONE = "pages/exchangeStepOnePage";
         String EXCHANGE_STEP_TWO = "pages/exchangeStepTwoPage";
         String EXCHANGE_STEP_THREE = "pages/exchangeStepThreePage";
+        String REGISTRATION = "pages/registrationPage";
     }
 
     interface Util {
