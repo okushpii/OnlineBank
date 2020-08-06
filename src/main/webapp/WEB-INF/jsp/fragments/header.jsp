@@ -19,6 +19,9 @@
             <li class="nav-item active">
                 <a class="nav-link" href="/login"><spring:message key="login"/> <span class="sr-only">(current)</span></a>
             </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/registration"><spring:message key="registration"/> <span class="sr-only">(current)</span></a>
+            </li>
             <auth:authorize>
                 <li class="nav-item dropdown active">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"

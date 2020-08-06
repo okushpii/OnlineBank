@@ -9,4 +9,6 @@ public interface UserDao {
     Optional<User> findByUsername(String username);
 
     Optional<User> findByCode(String code);
+
+    void register(User user);
 }

@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 import java.util.Optional;
 
 @Service
-public class DefaultUserService implements UserService{
+public class DefaultUserService implements UserService {
 
     @Resource
     private UserDao userDao;
@@ -21,5 +21,10 @@ public class DefaultUserService implements UserService{
     @Override
     public Optional<User> findByCode(String code) {
         return userDao.findByCode(code);
+    }
+
+    @Override
+    public void register(User user) {
+        userDao.register(user);
     }
 }
