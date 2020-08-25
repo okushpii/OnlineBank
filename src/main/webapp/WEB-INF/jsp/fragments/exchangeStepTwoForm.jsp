@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<form:form method="get" action="/exchangeStepThree">
+<form:form method="get" action="/exchangeStepThree" modelAttribute="exchangeRequestData">
     <div class="col">
         <div class="form-group">
 
@@ -46,6 +46,8 @@
                     <spring:message key="placeholder.sum.of.exchange"/>
                         name="sum" class="form-control" required>
             </div>
+            <div style="color: #ff0000"><form:errors path="sum" cssStyle="font-size: 15px"
+                                                     cssClass="error" element="em"/></div>
         </div>
 
         <br>

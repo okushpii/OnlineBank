@@ -13,7 +13,7 @@ public class RegistrationPageController {
 
     @GetMapping
     public String getRegistrationPage(Model model) {
-        model.addAttribute(WebConstants.RequestAttributes.REGISTER, new RegisterData());
+        model.addAttribute(WebConstants.ModelAttributes.REGISTER, new RegisterData());
         return WebConstants.Pages.REGISTRATION;
     }
 }

@@ -19,7 +19,7 @@ public class UserPageController {
 
     @GetMapping("/{userCode}")
     public String getUserPage(@PathVariable String userCode, Model model) {
-        model.addAttribute(WebConstants.RequestAttributes.USER, userFacade.findByCode(userCode).orElseThrow());
+        model.addAttribute(WebConstants.ModelAttributes.USER, userFacade.findByCode(userCode).orElseThrow());
         return WebConstants.Pages.USER;
     }
 }

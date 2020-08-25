@@ -5,6 +5,7 @@ import com.alexbro.onlinebank.core.exception.AccountsOperationException;
 import com.alexbro.onlinebank.core.service.i18service.I18Service;
 import com.alexbro.onlinebank.facade.account.AccountFacade;
 import com.alexbro.onlinebank.facade.currency.CurrencyFacade;
+import com.alexbro.onlinebank.facade.data.exchange.ExchangeRequestData;
 import com.alexbro.onlinebank.facade.user.UserFacade;
 import com.alexbro.onlinebank.webfront.WebConstants;
 import org.slf4j.Logger;
@@ -41,10 +42,11 @@ public class ExchangeStepTwoPageController {
                                          @RequestParam String currencyToCode, Model model, RedirectAttributes redirectAttributes,
                                          HttpServletRequest request) {
         Optional<AuthData> authData = Optional.ofNullable((AuthData) request.getSession().getAttribute(WebConstants.SessionAttributes.AUTH_DATA));
-        authData.flatMap(ad -> userFacade.findByCode(ad.getUserCode())).ifPresent(u -> model.addAttribute(WebConstants.RequestAttributes.
+        authData.flatMap(ad -> userFacade.findByCode(ad.getUserCode())).ifPresent(u -> model.addAttribute(WebConstants.ModelAttributes.
                 ACCOUNTS_FROM, accountFacade.findAllByCurrency(currencyFromCode)));
-        authData.flatMap(ad -> userFacade.findByCode(ad.getUserCode())).ifPresent(u -> model.addAttribute(WebConstants.RequestAttributes.
+        authData.flatMap(ad -> userFacade.findByCode(ad.getUserCode())).ifPresent(u -> model.addAttribute(WebConstants.ModelAttributes.
                 ACCOUNTS_TO, accountFacade.findAllByCurrency(currencyToCode)));
+        addExchangeRequestData(model);
         try {
             addCurrencies(model, currencyFromCode, currencyToCode);
             return WebConstants.Pages.EXCHANGE_STEP_TWO;
@@ -57,9 +59,15 @@ public class ExchangeStepTwoPageController {
 
     private void addCurrencies(Model model, String currencyFromCode, String currencyToCode) {
         if (!currencyFromCode.equals(currencyToCode)) {
-            model.addAttribute(WebConstants.RequestAttributes.CURRENCY_FROM, currencyFacade.findByCode(currencyFromCode).orElseThrow());
-            model.addAttribute(WebConstants.RequestAttributes.CURRENCY_TO, currencyFacade.findByCode(currencyToCode).orElseThrow());
+            model.addAttribute(WebConstants.ModelAttributes.CURRENCY_FROM, currencyFacade.findByCode(currencyFromCode).orElseThrow());
+            model.addAttribute(WebConstants.ModelAttributes.CURRENCY_TO, currencyFacade.findByCode(currencyToCode).orElseThrow());
         } else
             throw new AccountsOperationException(i18Service.getLocalizedValue(WebConstants.Messages.CURRENCIES_MATCHES_EXCEPTION_MESSAGE));
+    }
+
+    private void addExchangeRequestData(Model model) {
+        if (model.getAttribute(WebConstants.ModelAttributes.EXCHANGE_REQUEST_DATA) == null) {
+            model.addAttribute(WebConstants.ModelAttributes.EXCHANGE_REQUEST_DATA, new ExchangeRequestData());
+        }
     }
 }

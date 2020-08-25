@@ -10,13 +10,14 @@ public interface WebConstants {
         String LOGOUT = "/logout";
         String ACCOUNT = "/account";
         String TRANSFER = "/transfer";
+        String EXCHANGE = "/exchange";
         String EXCHANGE_STEP_ONE = "/exchangeStepOne";
         String EXCHANGE_STEP_TWO = "/exchangeStepTwo";
         String EXCHANGE_STEP_THREE = "/exchangeStepThree";
         String REGISTRATION = "/registration";
     }
 
-    interface RequestAttributes {
+    interface ModelAttributes {
         String USER = "user";
         String ACCOUNTS = "accounts";
         String CURRENCIES = "currencies";
@@ -27,6 +28,10 @@ public interface WebConstants {
         String CURRENCY_TO = "currencyTo";
         String EXCHANGE = "exchange";
         String REGISTER = "registerData";
+        String TRANSFER_REQUEST_DATA = "transferRequestData";
+        String EXCHANGE_REQUEST_DATA = "exchangeRequestData";
+        String TRANSFER_BINDING_RESULT = "org.springframework.validation.BindingResult.transferRequestData";
+        String EXCHANGE_BINDING_RESULT = "org.springframework.validation.BindingResult.exchangeRequestData";
     }
 
     interface SessionAttributes {
@@ -48,7 +53,7 @@ public interface WebConstants {
         String REDIRECT = "redirect:";
     }
 
-    interface Messages{
+    interface Messages {
         String CURRENCIES_MATCHES_EXCEPTION_MESSAGE = "currencies.matches";
     }
 }
