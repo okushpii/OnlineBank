@@ -23,7 +23,7 @@ public class HomePageController {
     public String getHomePage(Model model, HttpServletRequest request) {
         Optional<AuthData> authData = Optional.ofNullable((AuthData) request.getSession().getAttribute(WebConstants.SessionAttributes.AUTH_DATA));
         authData.flatMap(ad -> userFacade.findByCode(ad.getUserCode()))
-                .ifPresent(u -> model.addAttribute(WebConstants.RequestAttributes.USER, u));
+                .ifPresent(u -> model.addAttribute(WebConstants.ModelAttributes.USER, u));
         return WebConstants.Pages.HOME;
     }
 }

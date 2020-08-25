@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
     @GetMapping
     public String getLoginPage(Model model){
-        model.addAttribute(WebConstants.RequestAttributes.AUTH_REQUEST, new AuthRequest());
+        model.addAttribute(WebConstants.ModelAttributes.AUTH_REQUEST, new AuthRequest());
         return WebConstants.Pages.LOGIN;
     }
 

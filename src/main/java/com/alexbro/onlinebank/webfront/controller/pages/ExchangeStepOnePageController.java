@@ -34,7 +34,7 @@ public class ExchangeStepOnePageController {
         Optional<AuthData> authData = Optional.ofNullable((AuthData) request.getSession().getAttribute(WebConstants.SessionAttributes.AUTH_DATA));
         try {
             authData.flatMap(ad -> userFacade.findByCode(ad.getUserCode())).ifPresent(u -> model.
-                    addAttribute(WebConstants.RequestAttributes.CURRENCIES, currencyFacade.findAllByUser(u.getCode())));
+                    addAttribute(WebConstants.ModelAttributes.CURRENCIES, currencyFacade.findAllByUser(u.getCode())));
             return WebConstants.Pages.EXCHANGE_STEP_ONE;
         } catch (AccountsOperationException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());

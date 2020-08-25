@@ -38,7 +38,7 @@ public class DefaultAccountFacadeTest {
     private static final String ACCOUNT_CODE = "a1";
     private static final String ACCOUNT_TO_CODE = "a2";
     private static final Long CARD_NUMBER = 123345L;
-    private static BigDecimal SUM = BigDecimal.valueOf(1000);
+    private static Double SUM = 1000.0;
     private static BigDecimal SUM_AFTER = BigDecimal.valueOf(1000);
     private static BigDecimal CURRENT_RATE = BigDecimal.valueOf(1);
     private static BigDecimal EXCHANGE_RATE = BigDecimal.valueOf(10);
@@ -94,7 +94,7 @@ public class DefaultAccountFacadeTest {
         when(accountService.findByCode(ACCOUNT_CODE)).thenReturn(Optional.of(accountFrom));
         when(accountService.findByCode(ACCOUNT_TO_CODE)).thenReturn(Optional.of(accountTo));
         when(accountService.findByCardNumber(CARD_NUMBER)).thenReturn(Optional.of(accountTo));
-        when(accountCalculationService.calculateSumAfterExchange(SUM, CURRENT_RATE, EXCHANGE_RATE)).thenReturn(SUM_AFTER);
+        when(accountCalculationService.calculateSumAfterExchange(BigDecimal.valueOf(SUM), CURRENT_RATE, EXCHANGE_RATE)).thenReturn(SUM_AFTER);
         when(accountFrom.getMoney()).thenReturn(BALANCE_FROM);
         when(accountFrom.getUser()).thenReturn(user);
         when(user.getCode()).thenReturn(USER_CODE);
@@ -105,9 +105,8 @@ public class DefaultAccountFacadeTest {
     public void shouldTransfer() {
         testedInstance.transfer(ACCOUNT_CODE, CARD_NUMBER, SUM);
 
-        verify(sumValidationService).validate(SUM);
-        verify(sumValidationService).validateAccountFromMoney(BALANCE_FROM, SUM);
-        verify(accountService).transfer(accountFrom, accountTo, SUM);
+        verify(sumValidationService).validateAccountFromMoney(BALANCE_FROM, BigDecimal.valueOf(SUM));
+        verify(accountService).transfer(accountFrom, accountTo, BigDecimal.valueOf(SUM));
     }
 
     @Test(expected = AccountsOperationException.class)
@@ -158,9 +157,10 @@ public class DefaultAccountFacadeTest {
     @Test
     public void shouldGetExchangeData() {
         ExchangeData exchangeData = new ExchangeData();
-        when(accountCalculationService.calculateBalanceWithDelta(BALANCE_FROM, SUM.negate())).thenReturn(BALANCE_AFTER_FROM);
+        when(accountCalculationService.calculateBalanceWithDelta(BALANCE_FROM, BigDecimal.valueOf(SUM).negate())).thenReturn(BALANCE_AFTER_FROM);
         when(accountCalculationService.calculateBalanceWithDelta(BALANCE_TO, SUM_AFTER)).thenReturn(BALANCE_AFTER_TO);
-        when(exchangeDataFactory.create(accountFromData, accountToData, SUM, SUM_AFTER, BALANCE_FROM, BALANCE_TO, BALANCE_AFTER_FROM, BALANCE_AFTER_TO)).
+        when(exchangeDataFactory.create(accountFromData, accountToData, BigDecimal.valueOf(SUM), SUM_AFTER, BALANCE_FROM, BALANCE_TO,
+                BALANCE_AFTER_FROM, BALANCE_AFTER_TO)).
                 thenReturn(exchangeData);
 
         ExchangeData result = testedInstance.getExchangeData(accountFromData, accountToData, SUM);
@@ -179,9 +179,8 @@ public class DefaultAccountFacadeTest {
 
         verify(currencyValidationService).validateCurrenciesSize(currencies);
         verify(currencyValidationService).validateCurrenciesMatches(currencyFrom, currencyTo);
-        verify(sumValidationService).validate(SUM);
-        verify(sumValidationService).validateAccountFromMoney(BALANCE_FROM, SUM);
-        verify(accountService).exchange(accountFrom, accountTo, SUM, SUM_AFTER);
+        verify(sumValidationService).validateAccountFromMoney(BALANCE_FROM, BigDecimal.valueOf(SUM));
+        verify(accountService).exchange(accountFrom, accountTo, BigDecimal.valueOf(SUM), SUM_AFTER);
     }
 
     private void setAccountsData() {

@@ -46,13 +46,12 @@ public class DefaultAccountFacade implements AccountFacade {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAccountFacade.class);
 
     @Override
-    public void transfer(String accountCode, Long cardNumber, BigDecimal sum) {
-        sumValidationService.validate(sum);
+    public void transfer(String accountCode, Long cardNumber, Double sum) {
         Account accountFrom = accountService.findByCode(accountCode).
                 orElseThrow(() -> new AccountsOperationException(i18Service.getLocalizedValue(FacadeConstants.
                         ACCOUNT_IS_NOT_FOUND_MESSAGE)));
 
-        sumValidationService.validateAccountFromMoney(accountFrom.getMoney(), sum);
+        sumValidationService.validateAccountFromMoney(accountFrom.getMoney(), BigDecimal.valueOf(sum));
 
         Account accountTo = accountService.findByCardNumber(cardNumber).
                 orElseThrow(() -> new AccountsOperationException(i18Service.
@@ -61,7 +60,7 @@ public class DefaultAccountFacade implements AccountFacade {
         LOG.info("Transfer start from card:" + accountFrom.getCardNumber() + " to card:" +
                 accountTo.getCardNumber() + " Sum:" + sum);
 
-        accountService.transfer(accountFrom, accountTo, sum);
+        accountService.transfer(accountFrom, accountTo, BigDecimal.valueOf(sum));
         LOG.info("Transaction is success");
     }
 
@@ -81,17 +80,19 @@ public class DefaultAccountFacade implements AccountFacade {
     }
 
     @Override
-    public ExchangeData getExchangeData(AccountData accountFrom, AccountData accountTo, BigDecimal sum) {
-        BigDecimal sumAfter = accountCalculationService.calculateSumAfterExchange(sum, accountFrom.getCurrency().
+    public ExchangeData getExchangeData(AccountData accountFrom, AccountData accountTo, Double sum) {
+        sumValidationService.validateAccountFromMoney(accountFrom.getMoney(), BigDecimal.valueOf(sum));
+        
+        BigDecimal sumAfter = accountCalculationService.calculateSumAfterExchange(BigDecimal.valueOf(sum), accountFrom.getCurrency().
                 getRate(), accountTo.getCurrency().getRate());
 
-        BigDecimal balanceAfterFrom = accountCalculationService.calculateBalanceWithDelta(accountFrom.getMoney(), sum.negate());
+        BigDecimal balanceAfterFrom = accountCalculationService.calculateBalanceWithDelta(accountFrom.getMoney(), BigDecimal.valueOf(sum).negate());
 
         BigDecimal balanceAfterTo = accountCalculationService.calculateBalanceWithDelta(accountTo.getMoney(), sumAfter);
 
         return exchangeDataFactory.create(accountFrom,
                 accountTo,
-                sum,
+                BigDecimal.valueOf(sum),
                 sumAfter,
                 accountFrom.getMoney(),
                 accountTo.getMoney(),
@@ -99,10 +100,9 @@ public class DefaultAccountFacade implements AccountFacade {
     }
 
     @Override
-    public void exchange(String accountFromCode, String accountToCode, BigDecimal sum) {
-        sumValidationService.validate(sum);
+    public void exchange(String accountFromCode, String accountToCode, Double sum) {
         Account accountFrom = accountService.findByCode(accountFromCode).orElseThrow();
-        sumValidationService.validateAccountFromMoney(accountFrom.getMoney(), sum);
+        sumValidationService.validateAccountFromMoney(accountFrom.getMoney(), BigDecimal.valueOf(sum));
 
         currencyValidationService.validateCurrenciesSize(currencyService.findAllByUser(accountFrom.getUser().getCode()));
 
@@ -110,14 +110,14 @@ public class DefaultAccountFacade implements AccountFacade {
 
         currencyValidationService.validateCurrenciesMatches(accountFrom.getCurrency(), accountTo.getCurrency());
 
-        BigDecimal sumAfterExchange = accountCalculationService.calculateSumAfterExchange(sum, accountFrom.
+        BigDecimal sumAfterExchange = accountCalculationService.calculateSumAfterExchange(BigDecimal.valueOf(sum), accountFrom.
                 getCurrency().getRate(), accountTo.getCurrency().getRate());
 
         LOG.info("Exchange start from currency:" + accountFrom.getCurrency().getName()
                 + " to currency:" + accountTo.getCurrency().getName() + " From card:" + accountFrom.getCardNumber() + " to card:" +
                 accountTo.getCardNumber());
 
-        accountService.exchange(accountFrom, accountTo, sum, sumAfterExchange);
+        accountService.exchange(accountFrom, accountTo, BigDecimal.valueOf(sum), sumAfterExchange);
         LOG.info("Exchange is success");
     }
 }
