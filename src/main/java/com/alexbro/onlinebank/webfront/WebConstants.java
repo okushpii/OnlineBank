@@ -55,5 +55,6 @@ public interface WebConstants {
 
     interface Messages {
         String CURRENCIES_MATCHES_EXCEPTION_MESSAGE = "currencies.matches";
+        String AUTH_NOT_FOUND_EXCEPTION = "Auth data is not found";
     }
 }

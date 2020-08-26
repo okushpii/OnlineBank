@@ -2,7 +2,6 @@ package com.alexbro.onlinebank.webfront.controller.pages;
 
 import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.core.exception.AccountsOperationException;
-import com.alexbro.onlinebank.core.service.validation.SumValidationService;
 import com.alexbro.onlinebank.facade.account.AccountFacade;
 import com.alexbro.onlinebank.facade.data.account.AccountData;
 import com.alexbro.onlinebank.facade.data.currency.CurrencyData;
@@ -10,6 +9,7 @@ import com.alexbro.onlinebank.facade.data.exchange.ExchangeData;
 import com.alexbro.onlinebank.facade.data.exchange.ExchangeRequestData;
 import com.alexbro.onlinebank.facade.data.user.UserData;
 import com.alexbro.onlinebank.facade.user.UserFacade;
+import com.alexbro.onlinebank.webfront.controller.util.AuthManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -21,9 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -37,7 +35,6 @@ public class ExchangeStepThreePageControllerTest {
     private static final String ACCOUNT_TO_CODE = "a2";
     private static final String CURRENCY_FROM_CODE = "c1";
     private static final String CURRENCY_TO_CODE = "c2";
-    private static BigDecimal BALANCE_FROM = BigDecimal.valueOf(1000);
     private static Double SUM = 100.0;
     private static final String EXCHANGE_STEP_THREE_PAGE = "pages/exchangeStepThreePage";
     private static final String REDIRECT_TO_EXCHANGE_STEP_TWO_PAGE = "redirect:/exchangeStepTwo";
@@ -67,11 +64,9 @@ public class ExchangeStepThreePageControllerTest {
     @Mock
     private RedirectAttributes redirectAttributes;
     @Mock
-    private HttpServletRequest request;
+    private AuthManager authManager;
     @Mock
     private HttpSession session;
-    @Mock
-    private SumValidationService sumValidationService;
     @Mock
     private BindingResult bindingResult;
 
@@ -85,8 +80,7 @@ public class ExchangeStepThreePageControllerTest {
         authData.setUserCode(USER_CODE);
         userData = new UserData();
         exchangeData = new ExchangeData();
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("authData")).thenReturn(authData);
+        when(authManager.getAuthData(session)).thenReturn(authData);
         when(userFacade.findByCode(USER_CODE)).thenReturn(Optional.of(userData));
         when(accountFacade.getExchangeData(accountFrom, accountTo, SUM)).thenReturn(exchangeData);
         when(accountFacade.findByCode(ACCOUNT_FROM_CODE)).thenReturn(Optional.of(accountFrom));
@@ -103,19 +97,10 @@ public class ExchangeStepThreePageControllerTest {
 
     @Test
     public void shouldGetExchangeStepThreePage() {
-        String result = testedInstance.getExchangeStepThreePage(exchangeRequestData, bindingResult, model, redirectAttributes, request);
+        String result = testedInstance.getExchangeStepThreePage(exchangeRequestData, bindingResult, model, redirectAttributes, session);
 
         verify(model).addAttribute("exchange", exchangeData);
         assertEquals(EXCHANGE_STEP_THREE_PAGE, result);
-    }
-
-    @Test
-    public void shouldGetExchangeStepThreePageWhenAuthDataIsAbsent() {
-        when(session.getAttribute("authData")).thenReturn(null);
-
-        testedInstance.getExchangeStepThreePage(exchangeRequestData, bindingResult, model, redirectAttributes, request);
-
-        verify(model, never()).addAttribute("exchange", exchangeData);
     }
 
     @Test
@@ -124,7 +109,7 @@ public class ExchangeStepThreePageControllerTest {
                 "&currencyToCode=" + CURRENCY_TO_CODE;
         when(accountFacade.getExchangeData(accountFrom, accountTo, SUM)).thenThrow(new AccountsOperationException(ERROR_MESSAGE));
 
-        String result = testedInstance.getExchangeStepThreePage(exchangeRequestData, bindingResult, model, redirectAttributes, request);
+        String result = testedInstance.getExchangeStepThreePage(exchangeRequestData, bindingResult, model, redirectAttributes, session);
 
         verify(redirectAttributes).addFlashAttribute("error", ERROR_MESSAGE);
         assertEquals(expected, result);
@@ -137,7 +122,7 @@ public class ExchangeStepThreePageControllerTest {
 
         when(bindingResult.hasErrors()).thenReturn(true);
 
-        String result = testedInstance.getExchangeStepThreePage(exchangeRequestData, bindingResult, model, redirectAttributes, request);
+        String result = testedInstance.getExchangeStepThreePage(exchangeRequestData, bindingResult, model, redirectAttributes, session);
 
         verify(redirectAttributes).addFlashAttribute(EXCHANGE_BINDING_RESULT, bindingResult);
         verify(redirectAttributes).addFlashAttribute(EXCHANGE_REQUEST_DATA, exchangeRequestData);

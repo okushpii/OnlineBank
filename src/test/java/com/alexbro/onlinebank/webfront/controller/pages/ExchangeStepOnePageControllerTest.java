@@ -6,6 +6,7 @@ import com.alexbro.onlinebank.facade.currency.CurrencyFacade;
 import com.alexbro.onlinebank.facade.data.currency.CurrencyData;
 import com.alexbro.onlinebank.facade.data.user.UserData;
 import com.alexbro.onlinebank.facade.user.UserFacade;
+import com.alexbro.onlinebank.webfront.controller.util.AuthManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +16,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -43,7 +43,7 @@ public class ExchangeStepOnePageControllerTest {
     @Mock
     private CurrencyFacade currencyFacade;
     @Mock
-    private HttpServletRequest request;
+    private AuthManager authManager;
     @Mock
     private HttpSession session;
     @Mock
@@ -59,14 +59,13 @@ public class ExchangeStepOnePageControllerTest {
         authData.setUserCode(USER_CODE);
         userData = new UserData();
         currencies = new ArrayList<>();
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("authData")).thenReturn(authData);
+        when(authManager.getAuthData(session)).thenReturn(authData);
         when(userFacade.findByCode(USER_CODE)).thenReturn(Optional.of(userData));
     }
 
     @Test
-    public void shouldGetFirstStepOfExchangePageWhenAuthDataIsPresent() {
-        String result = testedInstance.getExchangeStepOnePage(request, model, redirectAttributes);
+    public void shouldGetFirstStepOfExchangePage() {
+        String result = testedInstance.getExchangeStepOnePage(session, model, redirectAttributes);
 
         verify(model).addAttribute("currencies", currencies);
 
@@ -74,19 +73,10 @@ public class ExchangeStepOnePageControllerTest {
     }
 
     @Test
-    public void shouldGetFirstStepOfExchangePageWhenAuthDataIsAbsent() {
-        when(session.getAttribute("authData")).thenReturn(null);
-
-        testedInstance.getExchangeStepOnePage(request, model, redirectAttributes);
-
-        verify(model, never()).addAttribute("currencies", currencies);
-    }
-
-    @Test
     public void shouldGetFirstStepOfExchangePageWhenThrowAccountsOperationException() {
         doThrow(new AccountsOperationException(ERROR_MESSAGE)).when(model).addAttribute("currencies", currencies);
 
-        String result = testedInstance.getExchangeStepOnePage(request, model, redirectAttributes);
+        String result = testedInstance.getExchangeStepOnePage(session, model, redirectAttributes);
 
         verify(redirectAttributes).addFlashAttribute("error", ERROR_MESSAGE);
         assertEquals(REDIRECT_TO_USER_PAGE + USER_CODE, result);

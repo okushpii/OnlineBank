@@ -8,6 +8,7 @@ import com.alexbro.onlinebank.facade.currency.CurrencyFacade;
 import com.alexbro.onlinebank.facade.data.exchange.ExchangeRequestData;
 import com.alexbro.onlinebank.facade.user.UserFacade;
 import com.alexbro.onlinebank.webfront.WebConstants;
+import com.alexbro.onlinebank.webfront.controller.util.AuthManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -18,8 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping(WebConstants.Mapping.EXCHANGE_STEP_TWO)
@@ -31,6 +31,8 @@ public class ExchangeStepTwoPageController {
     private UserFacade userFacade;
     @Resource
     private CurrencyFacade currencyFacade;
+    @Resource
+    private AuthManager authManager;
 
     @Resource
     private I18Service i18Service;
@@ -40,11 +42,11 @@ public class ExchangeStepTwoPageController {
     @GetMapping
     public String getExchangeStepTwoPage(@RequestParam String currencyFromCode,
                                          @RequestParam String currencyToCode, Model model, RedirectAttributes redirectAttributes,
-                                         HttpServletRequest request) {
-        Optional<AuthData> authData = Optional.ofNullable((AuthData) request.getSession().getAttribute(WebConstants.SessionAttributes.AUTH_DATA));
-        authData.flatMap(ad -> userFacade.findByCode(ad.getUserCode())).ifPresent(u -> model.addAttribute(WebConstants.ModelAttributes.
+                                         HttpSession session) {
+        AuthData authData = authManager.getAuthData(session);
+        userFacade.findByCode(authData.getUserCode()).ifPresent(u -> model.addAttribute(WebConstants.ModelAttributes.
                 ACCOUNTS_FROM, accountFacade.findAllByCurrency(currencyFromCode)));
-        authData.flatMap(ad -> userFacade.findByCode(ad.getUserCode())).ifPresent(u -> model.addAttribute(WebConstants.ModelAttributes.
+        userFacade.findByCode(authData.getUserCode()).ifPresent(u -> model.addAttribute(WebConstants.ModelAttributes.
                 ACCOUNTS_TO, accountFacade.findAllByCurrency(currencyToCode)));
         addExchangeRequestData(model);
         try {
