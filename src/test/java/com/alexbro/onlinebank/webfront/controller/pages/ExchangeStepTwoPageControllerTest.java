@@ -8,6 +8,7 @@ import com.alexbro.onlinebank.facade.data.account.AccountData;
 import com.alexbro.onlinebank.facade.data.currency.CurrencyData;
 import com.alexbro.onlinebank.facade.data.user.UserData;
 import com.alexbro.onlinebank.facade.user.UserFacade;
+import com.alexbro.onlinebank.webfront.controller.util.AuthManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +18,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +48,7 @@ public class ExchangeStepTwoPageControllerTest {
     @Mock
     private RedirectAttributes redirectAttributes;
     @Mock
-    private HttpServletRequest request;
+    private AuthManager authManager;
     @Mock
     private HttpSession session;
     @Mock
@@ -73,8 +73,7 @@ public class ExchangeStepTwoPageControllerTest {
         accountsTo = new ArrayList<>();
         currencyFrom = new CurrencyData();
         currencyTo = new CurrencyData();
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("authData")).thenReturn(authData);
+        when(authManager.getAuthData(session)).thenReturn(authData);
         when(userFacade.findByCode(USER_CODE)).thenReturn(Optional.of(userData));
         when(accountFacade.findAllByCurrency(CURRENCY_FROM_CODE)).thenReturn(accountsFrom);
         when(accountFacade.findAllByCurrency(CURRENCY_TO_CODE)).thenReturn(accountsTo);
@@ -85,7 +84,7 @@ public class ExchangeStepTwoPageControllerTest {
 
     @Test
     public void shouldGetExchangeStepTwoPage() {
-        String result = testedInstance.getExchangeStepTwoPage(CURRENCY_FROM_CODE, CURRENCY_TO_CODE, model, redirectAttributes, request);
+        String result = testedInstance.getExchangeStepTwoPage(CURRENCY_FROM_CODE, CURRENCY_TO_CODE, model, redirectAttributes, session);
 
         verify(model).addAttribute("accountsFrom", accountsFrom);
         verify(model).addAttribute("accountsTo", accountsTo);
@@ -95,18 +94,8 @@ public class ExchangeStepTwoPageControllerTest {
     }
 
     @Test
-    public void shouldGetExchangeStepTwoPageWhenAuthDataIsAbsent(){
-        when(session.getAttribute("authData")).thenReturn(null);
-
-        testedInstance.getExchangeStepTwoPage(CURRENCY_FROM_CODE, CURRENCY_TO_CODE, model, redirectAttributes, request);
-
-        verify(model, never()).addAttribute("accountsFrom", accountsFrom);
-        verify(model, never()).addAttribute("accountsTo", accountsTo);
-    }
-
-    @Test
     public void shouldGetExchangeStepTwoPageWhenCurrenciesMatches() {
-        String result = testedInstance.getExchangeStepTwoPage(CURRENCY_FROM_CODE, CURRENCY_FROM_CODE, model, redirectAttributes, request);
+        String result = testedInstance.getExchangeStepTwoPage(CURRENCY_FROM_CODE, CURRENCY_FROM_CODE, model, redirectAttributes, session);
 
         verify(redirectAttributes).addFlashAttribute("error", ERROR_MESSAGE);
         assertEquals(REDIRECT_TO_EXCHANGE_STEP_ONE_PAGE, result);

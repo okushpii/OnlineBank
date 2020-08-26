@@ -7,6 +7,7 @@ import com.alexbro.onlinebank.facade.data.account.AccountData;
 import com.alexbro.onlinebank.facade.data.currency.CurrencyData;
 import com.alexbro.onlinebank.facade.data.exchange.ExchangeRequestData;
 import com.alexbro.onlinebank.facade.data.transfer.TransferRequestData;
+import com.alexbro.onlinebank.webfront.controller.util.AuthManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +17,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import java.util.Optional;
@@ -29,7 +29,6 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class AccountControllerTest {
 
-    private static final String AUTH_DATA_ATTRIBUTE = "authData";
     private static final String ACCOUNT_CODE = "a1";
     private static final String ACCOUNT_TO_CODE = "a2";
     private static final String CURRENCY_FROM_CODE = "c1";
@@ -55,7 +54,7 @@ public class AccountControllerTest {
     @Mock
     private AuthData authData;
     @Mock
-    private HttpServletRequest request;
+    private AuthManager authManager;
     @Mock
     private HttpSession session;
     @Mock
@@ -77,8 +76,7 @@ public class AccountControllerTest {
 
     @Before
     public void setUp() {
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute(AUTH_DATA_ATTRIBUTE)).thenReturn(authData);
+        when(authManager.getAuthData(session)).thenReturn(authData);
         when(authData.getUserCode()).thenReturn(USER_CODE);
         when(bindingResult.hasErrors()).thenReturn(false);
         when(bindingResult.hasErrors()).thenReturn(false);
@@ -98,7 +96,7 @@ public class AccountControllerTest {
 
     @Test
     public void shouldTransfer() {
-        String result = testedInstance.transfer(transferRequestData, bindingResult, request, redirectAttributes);
+        String result = testedInstance.transfer(transferRequestData, bindingResult, session, redirectAttributes);
 
         verify(accountFacade).transfer(ACCOUNT_CODE, CARD_NUMBER, SUM);
         assertEquals(USER_REDIRECT + USER_CODE, result);
@@ -108,7 +106,7 @@ public class AccountControllerTest {
     public void shouldTransferWhenBindingResultHasError() {
         when(bindingResult.hasErrors()).thenReturn(true);
 
-        String result = testedInstance.transfer(transferRequestData, bindingResult, request, redirectAttributes);
+        String result = testedInstance.transfer(transferRequestData, bindingResult, session, redirectAttributes);
 
         verify(redirectAttributes).addFlashAttribute(TRANSFER_BINDING_RESULT, bindingResult);
         verify(redirectAttributes).addFlashAttribute(TRANSFER_REQUEST_DATA, transferRequestData);
@@ -120,7 +118,7 @@ public class AccountControllerTest {
         doThrow(new AccountsOperationException(ERROR_MESSAGE)).when(accountFacade).transfer(ACCOUNT_CODE, CARD_NUMBER,
                 SUM);
 
-        String result = testedInstance.transfer(transferRequestData, bindingResult, request, redirectAttributes);
+        String result = testedInstance.transfer(transferRequestData, bindingResult, session, redirectAttributes);
 
         verify(redirectAttributes).addFlashAttribute("error", ERROR_MESSAGE);
         assertEquals(TRANSFER_REDIRECT, result);
@@ -129,7 +127,7 @@ public class AccountControllerTest {
 
     @Test
     public void shouldExchange() {
-        String result = testedInstance.exchange(exchangeRequestData, bindingResult, request, redirectAttributes);
+        String result = testedInstance.exchange(exchangeRequestData, bindingResult, session, redirectAttributes);
 
         verify(accountFacade).exchange(ACCOUNT_CODE, ACCOUNT_TO_CODE, SUM);
         assertEquals(USER_REDIRECT + USER_CODE, result);
@@ -140,7 +138,7 @@ public class AccountControllerTest {
         doThrow(new AccountsOperationException(ERROR_MESSAGE)).when(accountFacade).exchange(ACCOUNT_CODE, ACCOUNT_TO_CODE,
                 SUM);
 
-        String result = testedInstance.exchange(exchangeRequestData, bindingResult, request, redirectAttributes);
+        String result = testedInstance.exchange(exchangeRequestData, bindingResult, session, redirectAttributes);
 
         verify(redirectAttributes).addFlashAttribute("error", ERROR_MESSAGE);
         assertEquals(EXCHANGE_STEP_ONE_REDIRECT, result);
@@ -152,7 +150,7 @@ public class AccountControllerTest {
                 "&currencyToCode=" + CURRENCY_TO_CODE;
         when(bindingResult.hasErrors()).thenReturn(true);
 
-        String result = testedInstance.exchange(exchangeRequestData, bindingResult, request, redirectAttributes);
+        String result = testedInstance.exchange(exchangeRequestData, bindingResult, session, redirectAttributes);
 
         verify(redirectAttributes).addFlashAttribute(EXCHANGE_BINDING_RESULT, bindingResult);
         verify(redirectAttributes).addFlashAttribute(EXCHANGE_REQUEST_DATA, exchangeRequestData);

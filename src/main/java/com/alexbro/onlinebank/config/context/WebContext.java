@@ -20,7 +20,10 @@ public class WebContext implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor);
-        registry.addInterceptor(authInterceptor).addPathPatterns(WebConstants.Mapping.USER + "/**");
+        registry.addInterceptor(authInterceptor).addPathPatterns(WebConstants.Mapping.USER + "/**",
+                WebConstants.Mapping.TRANSFER, WebConstants.Mapping.ACCOUNT + WebConstants.Mapping.TRANSFER, WebConstants.Mapping.EXCHANGE_STEP_ONE,
+                WebConstants.Mapping.EXCHANGE_STEP_TWO, WebConstants.Mapping.EXCHANGE_STEP_THREE, WebConstants.Mapping.ACCOUNT +
+                        WebConstants.Mapping.EXCHANGE);
     }
 
 }

@@ -4,6 +4,7 @@ import com.alexbro.onlinebank.webfront.controller.pages.HomePageController;
 import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.facade.data.user.UserData;
 import com.alexbro.onlinebank.facade.user.UserFacade;
+import com.alexbro.onlinebank.webfront.controller.util.AuthManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,12 +13,10 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.ui.Model;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -37,7 +36,7 @@ public class HomePageControllerTest {
     private Model model;
 
     @Mock
-    private HttpServletRequest request;
+    private AuthManager authManager;
 
     @Mock
     private HttpSession session;
@@ -51,25 +50,15 @@ public class HomePageControllerTest {
         authData = new AuthData();
         authData.setUserCode(USER_CODE);
         userData = new UserData();
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("authData")).thenReturn(authData);
+        when(authManager.getAuthData(session)).thenReturn(authData);
         when(userFacade.findByCode(USER_CODE)).thenReturn(Optional.of(userData));
     }
 
     @Test
-    public void shouldAddUserAttributeWhenAuthDataIsPresent() {
-        String result = testedInstance.getHomePage(model, request);
+    public void shouldAddUserAttribute() {
+        String result = testedInstance.getHomePage(model, session);
 
         verify(model).addAttribute("user", userData);
         assertEquals(HOME_PAGE, result);
-    }
-
-    @Test
-    public void shouldAddUserAttributeWhenAuthDataIsAbsent(){
-        when(session.getAttribute("authData")).thenReturn(null);
-
-        testedInstance.getHomePage(model, request);
-
-        verify(model, never()).addAttribute("user", userData);
     }
 }
