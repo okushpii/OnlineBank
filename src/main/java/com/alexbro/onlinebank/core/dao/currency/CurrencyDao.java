@@ -10,4 +10,6 @@ public interface CurrencyDao {
     List<Currency> findAllByUser(String userCode);
 
     Optional<Currency> findByCode(String code);
+
+    void save(List<Currency> currencies);
 }

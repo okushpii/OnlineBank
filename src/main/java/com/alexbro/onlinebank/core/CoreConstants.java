@@ -7,4 +7,5 @@ public interface CoreConstants {
     String INSUFFICIENT_CURRENCIES_MESSAGE = "insufficient.currencies";
     String CURRENCIES_MATCHES_EXCEPTION_MESSAGE = "currencies.matches";
     String ACCOUNTS_OPERATION_MESSAGE = "accounts.operation.message";
+    String CURRENCY_UPDATE_CRONJOB_TRIGGER = "${currency.update.cronjob.trigger}";
 }

@@ -18,6 +18,8 @@ public class HomePageController {
 
     @Resource
     private UserFacade userFacade;
+    @Resource
+    private AuthManager authManager;
 
     @Resource
     private AuthManager authManager;

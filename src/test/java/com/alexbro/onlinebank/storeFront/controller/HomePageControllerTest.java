@@ -50,7 +50,7 @@ public class HomePageControllerTest {
         authData = new AuthData();
         authData.setUserCode(USER_CODE);
         userData = new UserData();
-        when(authManager.getAuthData(session)).thenReturn(authData);
+        when(authManager.getOptionalAuthData(session)).thenReturn(Optional.of(authData));
         when(userFacade.findByCode(USER_CODE)).thenReturn(Optional.of(userData));
     }
 
