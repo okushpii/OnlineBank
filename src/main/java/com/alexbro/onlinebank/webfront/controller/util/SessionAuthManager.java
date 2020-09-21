@@ -16,4 +16,9 @@ public class SessionAuthManager implements AuthManager {
         Optional<AuthData> authData = Optional.ofNullable((AuthData)session.getAttribute(WebConstants.SessionAttributes.AUTH_DATA));
         return authData.orElseThrow(() -> new AuthException(WebConstants.Messages.AUTH_NOT_FOUND_EXCEPTION));
     }
+
+    @Override
+    public Optional<AuthData> getOptionalAuthData(HttpSession session){
+        return Optional.ofNullable((AuthData)session.getAttribute(WebConstants.SessionAttributes.AUTH_DATA));
+    }
 }

@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static junit.framework.TestCase.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -45,5 +46,14 @@ public class DefaultCurrencyServiceTest {
         Optional<Currency> result = testedEntry.findByCode(CURRENCY_CODE);
 
         assertEquals(Optional.of(currency), result);
+    }
+
+    @Test
+    public void shouldSave() {
+        List<Currency> currencies = new ArrayList<>();
+
+        testedEntry.save(currencies);
+
+        verify(currencyDao).save(currencies);
     }
 }

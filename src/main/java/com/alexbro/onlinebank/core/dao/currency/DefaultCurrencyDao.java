@@ -29,4 +29,9 @@ public class DefaultCurrencyDao implements CurrencyDao {
         return sessionProvider.getSession().createQuery(GET_BY_CODE_QUERY, Currency.class).
                 setParameter("code", code).uniqueResultOptional();
     }
+
+    @Override
+    public void save(List<Currency> currencies) {
+        currencies.forEach(c -> sessionProvider.getSession().save(c));
+    }
 }
