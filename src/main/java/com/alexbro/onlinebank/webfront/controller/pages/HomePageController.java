@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 @Controller
 @RequestMapping(WebConstants.Mapping.HOME)
@@ -21,13 +22,10 @@ public class HomePageController {
     @Resource
     private AuthManager authManager;
 
-    @Resource
-    private AuthManager authManager;
-
     @GetMapping
     public String getHomePage(Model model, HttpSession session) {
-        AuthData authData = authManager.getAuthData(session);
-        userFacade.findByCode(authData.getUserCode())
+        Optional<AuthData> authData = authManager.getOptionalAuthData(session);
+        authData.flatMap(ad -> userFacade.findByCode(ad.getUserCode()))
                 .ifPresent(u -> model.addAttribute(WebConstants.ModelAttributes.USER, u));
         return WebConstants.Pages.HOME;
     }
