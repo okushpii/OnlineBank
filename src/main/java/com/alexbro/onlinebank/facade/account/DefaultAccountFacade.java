@@ -13,6 +13,7 @@ import com.alexbro.onlinebank.facade.converter.utill.Converter;
 import com.alexbro.onlinebank.facade.data.account.AccountData;
 import com.alexbro.onlinebank.facade.data.exchange.ExchangeData;
 import com.alexbro.onlinebank.facade.data.factory.ExchangeDataFactory;
+import com.alexbro.onlinebank.facade.operation.OperationFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -31,7 +32,6 @@ public class DefaultAccountFacade implements AccountFacade {
     private I18Service i18Service;
     @Resource
     private CurrencyService currencyService;
-
     @Resource
     private AccountCalculationService accountCalculationService;
     @Resource
@@ -42,6 +42,8 @@ public class DefaultAccountFacade implements AccountFacade {
     private ExchangeDataFactory exchangeDataFactory;
     @Resource
     private CurrencyValidationService currencyValidationService;
+    @Resource
+    private OperationFacade operationFacade;
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAccountFacade.class);
 
@@ -61,6 +63,7 @@ public class DefaultAccountFacade implements AccountFacade {
                 accountTo.getCardNumber() + " Sum:" + sum);
 
         accountService.transfer(accountFrom, accountTo, BigDecimal.valueOf(sum));
+        operationFacade.saveTransferOperation(accountFrom, accountTo, sum);
         LOG.info("Transaction is success");
     }
 
@@ -82,7 +85,7 @@ public class DefaultAccountFacade implements AccountFacade {
     @Override
     public ExchangeData getExchangeData(AccountData accountFrom, AccountData accountTo, Double sum) {
         sumValidationService.validateAccountFromMoney(accountFrom.getMoney(), BigDecimal.valueOf(sum));
-        
+
         BigDecimal sumAfter = accountCalculationService.calculateSumAfterExchange(BigDecimal.valueOf(sum), accountFrom.getCurrency().
                 getRate(), accountTo.getCurrency().getRate());
 
@@ -118,6 +121,7 @@ public class DefaultAccountFacade implements AccountFacade {
                 accountTo.getCardNumber());
 
         accountService.exchange(accountFrom, accountTo, BigDecimal.valueOf(sum), sumAfterExchange);
+        operationFacade.saveExchangeOperation(accountFrom, accountTo, sum);
         LOG.info("Exchange is success");
     }
 }
