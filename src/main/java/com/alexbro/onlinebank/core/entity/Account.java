@@ -16,6 +16,7 @@ public class Account extends IndexedEntity {
     private BigDecimal money = BigDecimal.ZERO;
 
     @ManyToOne
+    @JoinColumn
     private User user;
 
     @ManyToOne

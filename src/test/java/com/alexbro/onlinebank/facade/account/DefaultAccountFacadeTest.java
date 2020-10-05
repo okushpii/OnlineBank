@@ -15,6 +15,7 @@ import com.alexbro.onlinebank.facade.data.account.AccountData;
 import com.alexbro.onlinebank.facade.data.currency.CurrencyData;
 import com.alexbro.onlinebank.facade.data.exchange.ExchangeData;
 import com.alexbro.onlinebank.facade.data.factory.ExchangeDataFactory;
+import com.alexbro.onlinebank.facade.operation.OperationFacade;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,6 +39,9 @@ public class DefaultAccountFacadeTest {
     private static final String ACCOUNT_CODE = "a1";
     private static final String ACCOUNT_TO_CODE = "a2";
     private static final Long CARD_NUMBER = 123345L;
+    private static final Long CARD_NUMBER_TO = 232322L;
+    private static final String CURRENCY_FROM_NAME = "euro";
+    private static final String CURRENCY_TO_NAME = "dollar";
     private static Double SUM = 1000.0;
     private static BigDecimal SUM_AFTER = BigDecimal.valueOf(1000);
     private static BigDecimal CURRENT_RATE = BigDecimal.valueOf(1);
@@ -82,6 +86,8 @@ public class DefaultAccountFacadeTest {
     private ExchangeDataFactory exchangeDataFactory;
     @Mock
     private CurrencyValidationService currencyValidationService;
+    @Mock
+    private OperationFacade operationFacade;
 
     private AccountData accountData;
     private AccountData accountFromData;
@@ -90,7 +96,8 @@ public class DefaultAccountFacadeTest {
     @Before
     public void setUp() {
         accountData = new AccountData();
-        setAccountsData();
+        setAccountsData(); when(accountFrom.getCardNumber()).thenReturn(CARD_NUMBER);
+        when(accountTo.getCardNumber()).thenReturn(CARD_NUMBER_TO);
         when(accountService.findByCode(ACCOUNT_CODE)).thenReturn(Optional.of(accountFrom));
         when(accountService.findByCode(ACCOUNT_TO_CODE)).thenReturn(Optional.of(accountTo));
         when(accountService.findByCardNumber(CARD_NUMBER)).thenReturn(Optional.of(accountTo));
@@ -107,6 +114,7 @@ public class DefaultAccountFacadeTest {
 
         verify(sumValidationService).validateAccountFromMoney(BALANCE_FROM, BigDecimal.valueOf(SUM));
         verify(accountService).transfer(accountFrom, accountTo, BigDecimal.valueOf(SUM));
+        verify(operationFacade).saveTransferOperation(accountFrom, accountTo, SUM);
     }
 
     @Test(expected = AccountsOperationException.class)
@@ -181,6 +189,7 @@ public class DefaultAccountFacadeTest {
         verify(currencyValidationService).validateCurrenciesMatches(currencyFrom, currencyTo);
         verify(sumValidationService).validateAccountFromMoney(BALANCE_FROM, BigDecimal.valueOf(SUM));
         verify(accountService).exchange(accountFrom, accountTo, BigDecimal.valueOf(SUM), SUM_AFTER);
+        verify(operationFacade).saveExchangeOperation(accountFrom, accountTo, SUM);
     }
 
     private void setAccountsData() {

@@ -1,7 +1,6 @@
 package com.alexbro.onlinebank.core.entity;
 
 import com.alexbro.onlinebank.core.entity.common.IndexedEntity;
-import com.alexbro.onlinebank.core.entity.Account;
 
 import javax.persistence.*;
 import java.util.List;
@@ -23,8 +22,12 @@ public class User extends IndexedEntity {
     private String username;
 
     @Column
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private List<Account> accounts;
+
+    @Column
+    @OneToMany(mappedBy = "user")
+    private List<Operation> operations;
 
     public String getName() {
         return name;
@@ -64,5 +67,13 @@ public class User extends IndexedEntity {
 
     public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
+    }
+
+    public List<Operation> getOperations() {
+        return operations;
+    }
+
+    public void setOperations(List<Operation> operations) {
+        this.operations = operations;
     }
 }
