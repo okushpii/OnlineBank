@@ -25,10 +25,6 @@ public class User extends IndexedEntity {
     @OneToMany(mappedBy = "user")
     private List<Account> accounts;
 
-    @Column
-    @OneToMany(mappedBy = "user")
-    private List<Operation> operations;
-
     public String getName() {
         return name;
     }
@@ -67,13 +63,5 @@ public class User extends IndexedEntity {
 
     public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
-    }
-
-    public List<Operation> getOperations() {
-        return operations;
-    }
-
-    public void setOperations(List<Operation> operations) {
-        this.operations = operations;
     }
 }

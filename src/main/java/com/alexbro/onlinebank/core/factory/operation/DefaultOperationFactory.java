@@ -15,28 +15,28 @@ public class DefaultOperationFactory implements OperationFactory {
     private IdGenerationService idGenerationService;
 
     @Override
-    public Operation createTransferOperation(Account accountForm, Account accountTo, Double sum) {
+    public Operation createTransferOperation(Account accountForm, Account accountTo, Type type, Double sum) {
         Operation operation = new Operation();
         operation.setCode(idGenerationService.generate());
-        operation.setType(Type.TRANSFER);
+        operation.setType(type);
         operation.setCardNumberFrom(accountForm.getCardNumber());
         operation.setCardNumberTo(accountTo.getCardNumber());
         operation.setSum(sum);
-        operation.setUser(accountForm.getUser());
+        operation.setAccount(accountForm);
         return operation;
     }
 
     @Override
-    public Operation createExchangeOperation(Account accountForm, Account accountTo, Double sum) {
+    public Operation createExchangeOperation(Account accountForm, Account accountTo, Type type, Double sum) {
         Operation operation = new Operation();
         operation.setCode(idGenerationService.generate());
-        operation.setType(Type.EXCHANGE);
+        operation.setType(type);
         operation.setCardNumberFrom(accountForm.getCardNumber());
         operation.setCardNumberTo(accountTo.getCardNumber());
         operation.setCurrencyFromName(accountForm.getCurrency().getName());
         operation.setCurrencyToName(accountTo.getCurrency().getName());
         operation.setSum(sum);
-        operation.setUser(accountForm.getUser());
+        operation.setAccount(accountForm);
         return operation;
     }
 }

@@ -46,15 +46,7 @@
         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
             <div class="row">
                 <div class="col-md-6">
-                    <label><spring:message key="user.id"/> </label>
-                </div>
-                <div class="col-md-6">
-                    <p>${user.code}</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <label><spring:message key="name"/></label>
+                    ` <label><spring:message key="name"/></label>
                 </div>
                 <div class="col-md-6">
                     <p>${user.name}</p>
@@ -79,32 +71,50 @@
         </div>
 
         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            <c:forEach items="${user.accounts}" var="accounts">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label><spring:message key="card.number"/></label>
+            <div id="accordion">
+                <c:forEach items="${user.accounts}" var="accounts">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#${accounts.code}"
+                                        aria-expanded="true" aria-controls="${accounts.code}">
+                                        ${accounts.cardNumber} Balance ${accounts.money} ${accounts.currency.name}
+                                </button>
+                            </h5>
+                        </div>
+
+                        <div id="${accounts.code}" class="collapse" aria-labelledby="headingOne"
+                             data-parent="#accordion">
+                            <div class="card-body">
+                                <c:forEach items="${accounts.operations}" var="operations">
+                                <c:if test="${operations.type eq 'TRANSFER_OUTCOME'}">
+                                <p style="color: red">Transfer: ${operations.sum} to
+                                    card: ${operations.cardNumberTo}
+                                    <br>
+                                    </c:if>
+                                    <c:if test="${operations.type eq 'TRANSFER_INCOME'}">
+                                <p style="color:green">Refill: ${operations.sum} from
+                                    card: ${operations.cardNumberTo}
+                                    <br>
+                                    </c:if>
+                                    <c:if test="${operations.type eq 'EXCHANGE_OUTCOME'}">
+                                <p style="color: red">Currency exchange: ${operations.sum} from
+                                        ${operations.currencyFromName} to
+                                        ${operations.currencyToName} to card: ${operations.cardNumberTo}
+                                    <br>
+                                    </c:if>
+                                    <c:if test="${operations.type eq 'EXCHANGE_INCOME'}">
+                                <p style="color:green">Currency exchange: ${operations.sum} from
+                                        ${operations.currencyToName} to
+                                        ${operations.currencyFromName} from card: ${operations.cardNumberTo}
+                                    <br>
+                                    </c:if>
+                                    </c:forEach>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <p>${accounts.cardNumber}</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label><spring:message key="currency"/></label>
-                    </div>
-                    <div class="col-md-6">
-                        <p>${accounts.currency.name}</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label><spring:message key="money"/></label>
-                    </div>
-                    <div class="col-md-6">
-                        <p>${accounts.money}</p>
-                    </div>
-                </div>
-            </c:forEach>
+                </c:forEach>
+            </div>
         </div>
     </div>
 </div>

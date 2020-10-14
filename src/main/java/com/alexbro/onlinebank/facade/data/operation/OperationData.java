@@ -1,34 +1,28 @@
-package com.alexbro.onlinebank.core.entity;
+package com.alexbro.onlinebank.facade.data.operation;
 
-import com.alexbro.onlinebank.core.entity.common.IndexedEntity;
+import com.alexbro.onlinebank.core.entity.Type;
+import com.alexbro.onlinebank.facade.data.account.AccountData;
+import com.alexbro.onlinebank.facade.data.user.UserData;
 
-import javax.persistence.*;
+public class OperationData {
 
-@Entity
-@Table(name = "operation")
-public class Operation extends IndexedEntity {
+    private String code;
 
-    @Column
     private Type type;
 
-    @Column
     private Long cardNumberFrom;
 
-    @Column
     private Long cardNumberTo;
 
-    @Column
     private String currencyFromName;
 
-    @Column
     private String currencyToName;
 
-    @Column
     private Double sum;
 
-    @ManyToOne
-    @JoinColumn
-    private Account account;
+    private AccountData account;
+
+    private UserData user;
 
     public Type getType() {
         return type;
@@ -78,11 +72,27 @@ public class Operation extends IndexedEntity {
         this.sum = sum;
     }
 
-    public Account getAccount() {
+    public AccountData getAccount() {
         return account;
     }
 
-    public void setAccount(Account account) {
+    public void setAccount(AccountData account) {
         this.account = account;
+    }
+
+    public UserData getUser() {
+        return user;
+    }
+
+    public void setUser(UserData user) {
+        this.user = user;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

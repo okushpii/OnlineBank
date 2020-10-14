@@ -16,8 +16,9 @@ public class Currency extends IndexedEntity {
 
     @Column
     private BigDecimal rate;
-    
-    @OneToMany
+
+    @Column
+    @OneToMany(mappedBy = "currency")
     private List<Account> accounts;
 
     public String getName() {

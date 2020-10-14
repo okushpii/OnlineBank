@@ -1,6 +1,8 @@
 package com.alexbro.onlinebank.core.entity;
 
 public enum Type {
-    TRANSFER,
-    EXCHANGE
+    TRANSFER_INCOME,
+    TRANSFER_OUTCOME,
+    EXCHANGE_INCOME,
+    EXCHANGE_OUTCOME
 }

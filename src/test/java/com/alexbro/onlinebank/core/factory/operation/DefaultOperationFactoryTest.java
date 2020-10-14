@@ -29,9 +29,6 @@ public class DefaultOperationFactoryTest {
     private IdGenerationService idGenerationService;
 
     @Mock
-    private User user;
-
-    @Mock
     private Operation operation;
 
     @Mock
@@ -58,40 +55,30 @@ public class DefaultOperationFactoryTest {
         when(operation.getCode()).thenReturn(CODE);
         when(operation.getCardNumberFrom()).thenReturn(CARD_NUMBER_FROM);
         when(operation.getCardNumberTo()).thenReturn(CARD_NUMBER_TO);
-        when(operation.getType()).thenReturn(Type.EXCHANGE);
         when(operation.getCurrencyFromName()).thenReturn(CURRENCY_FROM_NAME);
         when(operation.getCurrencyToName()).thenReturn(CURRENCY_TO_NAME);
         when(operation.getSum()).thenReturn(SUM);
-        when(operation.getUser()).thenReturn(user);
     }
 
     @Test
     public void shouldCreateTransferOperation() {
-        when(operation.getType()).thenReturn(Type.TRANSFER);
-
-        testedInstance.createTransferOperation(accountFrom, accountTo, SUM);
+        testedInstance.createTransferOperation(accountFrom, accountTo, Type.TRANSFER_OUTCOME, SUM);
 
         assertEquals(CODE, operation.getCode());
-        assertEquals(Type.TRANSFER, operation.getType());
         assertEquals(CARD_NUMBER_FROM, operation.getCardNumberFrom());
         assertEquals(CARD_NUMBER_TO, operation.getCardNumberTo());
         assertEquals(SUM, operation.getSum());
-        assertEquals(user, operation.getUser());
     }
 
     @Test
     public void shouldCreateExchangeOperation() {
-        when(operation.getType()).thenReturn(Type.EXCHANGE);
-
-        testedInstance.createExchangeOperation(accountFrom, accountTo, SUM);
+        testedInstance.createExchangeOperation(accountFrom, accountTo, Type.EXCHANGE_OUTCOME, SUM);
 
         assertEquals(CODE, operation.getCode());
-        assertEquals(Type.EXCHANGE, operation.getType());
         assertEquals(CARD_NUMBER_FROM, operation.getCardNumberFrom());
         assertEquals(CARD_NUMBER_TO, operation.getCardNumberTo());
         assertEquals(CURRENCY_FROM_NAME, operation.getCurrencyFromName());
         assertEquals(CURRENCY_TO_NAME, operation.getCurrencyToName());
         assertEquals(SUM, operation.getSum());
-        assertEquals(user, operation.getUser());
     }
 }

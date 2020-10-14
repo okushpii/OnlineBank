@@ -4,6 +4,7 @@ import com.alexbro.onlinebank.core.entity.common.IndexedEntity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "account")
@@ -20,7 +21,12 @@ public class Account extends IndexedEntity {
     private User user;
 
     @ManyToOne
+    @JoinColumn
     private Currency currency;
+
+    @Column
+    @OneToMany(mappedBy = "account")
+    private List<Operation> operations;
 
     public Long getCardNumber() {
         return cardNumber;
@@ -52,5 +58,13 @@ public class Account extends IndexedEntity {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Operation> getOperations() {
+        return operations;
+    }
+
+    public void setOperations(List<Operation> operations) {
+        this.operations = operations;
     }
 }
