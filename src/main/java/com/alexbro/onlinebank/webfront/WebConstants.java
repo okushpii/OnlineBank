@@ -6,6 +6,7 @@ public interface WebConstants {
         String HOME = "/";
         String LOGIN = "/login";
         String USER = "/user";
+        String ADMIN = "/admin";
         String AUTH = "/auth";
         String LOGOUT = "/logout";
         String ACCOUNT = "/account";
@@ -19,6 +20,7 @@ public interface WebConstants {
 
     interface ModelAttributes {
         String USER = "user";
+        String ADMIN = "admin";
         String ACCOUNTS = "accounts";
         String CURRENCIES = "currencies";
         String AUTH_REQUEST = "authRequest";
@@ -39,14 +41,15 @@ public interface WebConstants {
     }
 
     interface Pages {
-        String HOME = "pages/homePage";
-        String LOGIN = "pages/loginPage";
-        String USER = "pages/userPage";
-        String TRANSFER = "pages/transferPage";
-        String EXCHANGE_STEP_ONE = "pages/exchangeStepOnePage";
-        String EXCHANGE_STEP_TWO = "pages/exchangeStepTwoPage";
-        String EXCHANGE_STEP_THREE = "pages/exchangeStepThreePage";
-        String REGISTRATION = "pages/registrationPage";
+        String HOME = "pages/common/homePage";
+        String LOGIN = "pages/common/loginPage";
+        String USER = "pages/user/userPage";
+        String ADMIN = "pages/admin/adminPage";
+        String TRANSFER = "pages/user/transferPage";
+        String EXCHANGE_STEP_ONE = "pages/user/exchangeStepOnePage";
+        String EXCHANGE_STEP_TWO = "pages/user/exchangeStepTwoPage";
+        String EXCHANGE_STEP_THREE = "pages/user/exchangeStepThreePage";
+        String REGISTRATION = "pages/common/registrationPage";
     }
 
     interface Util {

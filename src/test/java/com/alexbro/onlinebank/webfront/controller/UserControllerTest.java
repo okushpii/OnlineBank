@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 public class UserControllerTest {
 
     private static final String REGISTRATION_REDIRECT = "redirect:/registration";
-    private static final String REGISTRATION_PAGE = "pages/registrationPage";
+    private static final String REGISTRATION_PAGE = "pages/common/registrationPage";
 
     @InjectMocks
     private UserController testedInstance;

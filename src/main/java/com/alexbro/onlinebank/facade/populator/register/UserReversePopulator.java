@@ -22,7 +22,7 @@ public class UserReversePopulator implements Populator<RegisterData, User> {
     public void populate(RegisterData registerData, User user) {
         user.setCode(idGenerationService.generate());
         user.setName(registerData.getName());
-        user.setEmaill(registerData.getEmail());
+        user.setEmail(registerData.getEmail());
         user.setUsername(registerData.getUsername());
         user.setPassword(encodePasswordService.encodePassword(registerData.getPassword()));
     }

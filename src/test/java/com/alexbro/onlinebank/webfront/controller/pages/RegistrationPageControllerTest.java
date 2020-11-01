@@ -12,7 +12,7 @@ import static junit.framework.TestCase.assertEquals;
 @RunWith(MockitoJUnitRunner.class)
 public class RegistrationPageControllerTest {
 
-    private static final String REGISTRATION_PAGE = "pages/registrationPage";
+    private static final String REGISTRATION_PAGE = "pages/common/registrationPage";
 
     @InjectMocks
     private RegistrationPageController testedEntry;

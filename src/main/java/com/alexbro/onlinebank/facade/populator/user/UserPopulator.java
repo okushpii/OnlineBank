@@ -21,6 +21,8 @@ public class UserPopulator implements Populator<User, UserData> {
         userData.setCode(user.getCode());
         userData.setName(user.getName());
         userData.setEmail(user.getEmail());
+        userData.setPassword(user.getPassword());
+        userData.setRole(user.getRole());
         userData.setAccounts(accountsConverter.convertAll(user.getAccounts()));
     }
 }

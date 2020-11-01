@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 public class TransferPageControllerTest {
 
     private static final String USER_CODE = "u1";
-    private static final String TRANSFER_PAGE = "pages/transferPage";
+    private static final String TRANSFER_PAGE = "pages/user/transferPage";
 
     @InjectMocks
     private TransferPageController testedInstance;

@@ -28,6 +28,7 @@ public class TransferPageController {
         AuthData authData = authManager.getAuthData(session);
         userFacade.findByCode(authData.getUserCode()).
                 ifPresent(u -> model.addAttribute(WebConstants.ModelAttributes.ACCOUNTS, u.getAccounts()));
+        model.addAttribute(WebConstants.ModelAttributes.USER, userFacade.findByCode(authData.getUserCode()).orElseThrow());
         if (model.getAttribute(WebConstants.ModelAttributes.TRANSFER_REQUEST_DATA) == null) {
             model.addAttribute(WebConstants.ModelAttributes.TRANSFER_REQUEST_DATA, new TransferRequestData());
         }

@@ -7,6 +7,7 @@ import com.alexbro.onlinebank.auth.facade.data.AuthRequest;
 import com.alexbro.onlinebank.auth.exception.AuthException;
 import com.alexbro.onlinebank.facade.account.DefaultAccountFacade;
 import com.alexbro.onlinebank.webfront.WebConstants;
+import com.alexbro.onlinebank.webfront.urlresolver.UrlResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,9 @@ public class AuthController {
     @Resource
     private AuthFacade authFacade;
 
+    @Resource
+    private UrlResolver urlResolver;
+
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAccountFacade.class);
 
     @PostMapping
@@ -35,7 +39,7 @@ public class AuthController {
                     authRequest.getPassword());
             request.getSession().setAttribute(WebConstants.SessionAttributes.AUTH_DATA, authData);
             LOG.info(authData.getUsername() + " is authorised");
-            return WebConstants.Util.REDIRECT + WebConstants.Mapping.USER + "/" + authData.getUserCode();
+            return WebConstants.Util.REDIRECT + urlResolver.resolve(authData.getRole()) + "/" + authData.getUserCode();
         } catch (AuthException e) {
             model.addAttribute("error", AuthConstants.ERROR_MESSAGE);
             LOG.info(e.getMessage(), e);

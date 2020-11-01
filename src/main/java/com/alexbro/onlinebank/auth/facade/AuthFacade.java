@@ -7,5 +7,4 @@ public interface AuthFacade {
     AuthData authorize(String username, String password);
 
     boolean isAuthorized(AuthData authData);
-
 }

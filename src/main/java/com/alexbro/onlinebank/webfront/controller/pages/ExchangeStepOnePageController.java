@@ -38,6 +38,7 @@ public class ExchangeStepOnePageController {
         try {
             userFacade.findByCode(authData.getUserCode()).ifPresent(u -> model.
                     addAttribute(WebConstants.ModelAttributes.CURRENCIES, currencyFacade.findAllByUser(u.getCode())));
+            model.addAttribute(WebConstants.ModelAttributes.USER, userFacade.findByCode(authData.getUserCode()).orElseThrow());
             return WebConstants.Pages.EXCHANGE_STEP_ONE;
         } catch (AccountsOperationException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());

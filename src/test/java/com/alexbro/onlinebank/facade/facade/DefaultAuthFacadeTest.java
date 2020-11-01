@@ -1,13 +1,13 @@
 package com.alexbro.onlinebank.facade.facade;
 
-import com.alexbro.onlinebank.core.entity.User;
+import com.alexbro.onlinebank.core.entity.Principal;
 import com.alexbro.onlinebank.auth.model.service.AuthService;
 import com.alexbro.onlinebank.core.service.encode.password.EncodePasswordService;
-import com.alexbro.onlinebank.core.service.user.UserService;
 import com.alexbro.onlinebank.auth.model.service.AuthTokenService;
 import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.auth.facade.data.factory.AuthDataFactory;
 import com.alexbro.onlinebank.auth.facade.DefaultAuthFacade;
+import com.alexbro.onlinebank.core.service.principal.PrincipalService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +35,7 @@ public class DefaultAuthFacadeTest {
     private DefaultAuthFacade testedEntry;
 
     @Mock
-    private UserService userService;
+    private PrincipalService principalService;
     @Mock
     private AuthService authService;
     @Mock
@@ -45,20 +45,20 @@ public class DefaultAuthFacadeTest {
     @Mock
     private EncodePasswordService encodePasswordService;
     @Mock
-    private User user;
+    private Principal principal;
     @Mock
     private AuthData authData;
 
     @Before
     public void setUp() {
-        when(user.getPassword()).thenReturn(ENCODED_USER_PASSWORD);
-        when(user.getUsername()).thenReturn(USER_NAME);
+        when(principal.getPassword()).thenReturn(ENCODED_USER_PASSWORD);
+        when(principal.getUsername()).thenReturn(USER_NAME);
         when(authData.getUsername()).thenReturn(USER_NAME);
         when(authData.getToken()).thenReturn(AUTHENTICATION_TOKEN);
         when(encodePasswordService.encodePassword(NOT_ENCODED_USER_PASSWORD)).thenReturn(ENCODED_USER_PASSWORD);
         when(authTokenService.generateToken(USER_NAME, ENCODED_USER_PASSWORD)).thenReturn(AUTHENTICATION_TOKEN);
-        when(authDataFactory.create(user, AUTHENTICATION_TOKEN)).thenReturn(authData);
-        when(userService.findByUsername(USER_NAME)).thenReturn(Optional.of(user));
+        when(authDataFactory.create(principal, AUTHENTICATION_TOKEN)).thenReturn(authData);
+        when(principalService.findByUsername(USER_NAME)).thenReturn(Optional.of(principal));
     }
 
     @Test
@@ -72,7 +72,7 @@ public class DefaultAuthFacadeTest {
 
     @Test(expected = RuntimeException.class)
     public void shouldAuthoriseWhenUserIsEmpty() {
-        when(userService.findByUsername(USER_NAME)).thenReturn(Optional.empty());
+        when(principalService.findByUsername(USER_NAME)).thenReturn(Optional.empty());
 
         testedEntry.authorize(USER_NAME, NOT_ENCODED_USER_PASSWORD);
     }

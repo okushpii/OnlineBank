@@ -57,6 +57,7 @@ public class ExchangeStepThreePageController {
             ExchangeData exchangeData = accountFacade.getExchangeData(accountFrom, accountTo, exchangeRequestData.getSum());
             userFacade.findByCode(authData.getUserCode()).ifPresent(u -> model.
                     addAttribute(WebConstants.ModelAttributes.EXCHANGE, exchangeData));
+            model.addAttribute(WebConstants.ModelAttributes.USER, userFacade.findByCode(authData.getUserCode()).orElseThrow());
             addExchangeRequestData(model);
             return WebConstants.Pages.EXCHANGE_STEP_THREE;
         } catch (AccountsOperationException e) {

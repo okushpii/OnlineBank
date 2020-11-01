@@ -32,7 +32,7 @@ public class ExchangeStepTwoPageControllerTest {
     private static final String USER_CODE = "u1";
     private static final String CURRENCY_FROM_CODE = "c1";
     private static final String CURRENCY_TO_CODE = "c2";
-    private static final String EXCHANGE_STEP_TWO_PAGE = "pages/exchangeStepTwoPage";
+    private static final String EXCHANGE_STEP_TWO_PAGE = "pages/user/exchangeStepTwoPage";
     private static final String REDIRECT_TO_EXCHANGE_STEP_ONE_PAGE = "redirect:/exchangeStepOne";
     private static final String ERROR_MESSAGE = "Currencies matches";
 

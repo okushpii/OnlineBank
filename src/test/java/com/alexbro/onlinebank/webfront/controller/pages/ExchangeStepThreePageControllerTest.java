@@ -36,7 +36,7 @@ public class ExchangeStepThreePageControllerTest {
     private static final String CURRENCY_FROM_CODE = "c1";
     private static final String CURRENCY_TO_CODE = "c2";
     private static Double SUM = 100.0;
-    private static final String EXCHANGE_STEP_THREE_PAGE = "pages/exchangeStepThreePage";
+    private static final String EXCHANGE_STEP_THREE_PAGE = "pages/user/exchangeStepThreePage";
     private static final String REDIRECT_TO_EXCHANGE_STEP_TWO_PAGE = "redirect:/exchangeStepTwo";
     private static final String EXCHANGE_BINDING_RESULT = "org.springframework.validation.BindingResult.exchangeRequestData";
     private static final String EXCHANGE_REQUEST_DATA = "exchangeRequestData";
