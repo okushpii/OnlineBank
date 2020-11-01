@@ -17,7 +17,7 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class LoginPageControllerTest {
 
-    private static final String LOGIN_PAGE = "pages/loginPage";
+    private static final String LOGIN_PAGE = "pages/common/loginPage";
 
     @InjectMocks
     private LoginPageController testedEntry;

@@ -1,9 +1,9 @@
 package com.alexbro.onlinebank.storeFront.controller;
 
-import com.alexbro.onlinebank.webfront.controller.pages.HomePageController;
-import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.facade.data.user.UserData;
 import com.alexbro.onlinebank.facade.user.UserFacade;
+import com.alexbro.onlinebank.webfront.controller.pages.HomePageController;
+import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.webfront.controller.util.AuthManager;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 public class HomePageControllerTest {
 
     private static final String USER_CODE = "u1";
-    private static final String HOME_PAGE = "pages/homePage";
+    private static final String HOME_PAGE = "pages/common/homePage";
 
     @InjectMocks
     private HomePageController testedInstance;

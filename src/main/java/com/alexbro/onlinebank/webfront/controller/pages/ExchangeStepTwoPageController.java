@@ -50,6 +50,7 @@ public class ExchangeStepTwoPageController {
                 ACCOUNTS_TO, accountFacade.findAllByCurrency(currencyToCode)));
         addExchangeRequestData(model);
         try {
+            model.addAttribute(WebConstants.ModelAttributes.USER, userFacade.findByCode(authData.getUserCode()).orElseThrow());
             addCurrencies(model, currencyFromCode, currencyToCode);
             return WebConstants.Pages.EXCHANGE_STEP_TWO;
         } catch (AccountsOperationException e) {

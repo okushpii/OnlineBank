@@ -4,10 +4,10 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<%@include file="/WEB-INF/jsp/fragments/head.jsp" %>
-<%@include file="/WEB-INF/jsp/fragments/header.jsp" %>
+<%@include file="/WEB-INF/jsp/fragments/common/head.jsp" %>
+<%@include file="/WEB-INF/jsp/fragments/common/header.jsp" %>
 <body>
-<%@include file="/WEB-INF/jsp/fragments/registrationForm.jsp" %>
+<%@include file="/WEB-INF/jsp/fragments/common/registrationForm.jsp" %>
 </body>
-<%@include file="/WEB-INF/jsp/fragments/scripts.jsp" %>
+<%@include file="/WEB-INF/jsp/fragments/common/scripts.jsp" %>
 </html>

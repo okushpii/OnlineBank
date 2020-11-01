@@ -4,7 +4,9 @@ import com.alexbro.onlinebank.auth.exception.AuthException;
 import com.alexbro.onlinebank.auth.facade.AuthFacade;
 import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.auth.facade.data.AuthRequest;
+import com.alexbro.onlinebank.core.entity.Role;
 import com.alexbro.onlinebank.webfront.controller.AuthController;
+import com.alexbro.onlinebank.webfront.urlresolver.UrlResolver;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +26,7 @@ import static org.mockito.Mockito.when;
 public class AuthControllerTest {
     private static final String USER_NAME = "alex123";
     private static final String USER_PASSWORD = "12345";
-    private static final String LOGIN_PAGE = "pages/loginPage";
+    private static final String LOGIN_PAGE = "pages/common/loginPage";
     private static final String ERROR_MESSAGE = "User is not found by this login and password!";
     private static final String AUTH_DATA = "authData";
     private static final String LOGIN_REDIRECT = "redirect:/login";
@@ -44,12 +46,16 @@ public class AuthControllerTest {
     private AuthData authData;
     @Mock
     private AuthRequest authRequest;
+    @Mock
+    private UrlResolver urlResolver;
 
     @Before
     public void setUp() {
         when(request.getSession()).thenReturn(session);
         when(authRequest.getUsername()).thenReturn(USER_NAME);
         when(authRequest.getPassword()).thenReturn(USER_PASSWORD);
+        when(authData.getRole()).thenReturn(Role.USER);
+        when(urlResolver.resolve(Role.USER)).thenReturn("/user");
     }
 
     @Test

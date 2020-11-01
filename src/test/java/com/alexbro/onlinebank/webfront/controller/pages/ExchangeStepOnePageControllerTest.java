@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 public class ExchangeStepOnePageControllerTest {
 
     private static final String USER_CODE = "u1";
-    private static final String FIRST_STEP_OF_EXCHANGE_PAGE = "pages/exchangeStepOnePage";
+    private static final String FIRST_STEP_OF_EXCHANGE_PAGE = "pages/user/exchangeStepOnePage";
     private static final String REDIRECT_TO_USER_PAGE = "redirect:/user/";
     private static final String ERROR_MESSAGE = "Error message";
 

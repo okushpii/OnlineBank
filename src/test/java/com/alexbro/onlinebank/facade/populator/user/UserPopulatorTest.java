@@ -1,6 +1,7 @@
 package com.alexbro.onlinebank.facade.populator.user;
 
 import com.alexbro.onlinebank.core.entity.Account;
+import com.alexbro.onlinebank.core.entity.Role;
 import com.alexbro.onlinebank.core.entity.User;
 import com.alexbro.onlinebank.facade.converter.utill.Converter;
 import com.alexbro.onlinebank.facade.data.account.AccountData;
@@ -22,6 +23,7 @@ public class UserPopulatorTest {
     private static final String USER_CODE = "u1";
     private static final String USER_NAME = "name";
     private static final String USER_EMAIL = "email";
+    private static final String PASSWORD = "password";
 
     @InjectMocks
     private UserPopulator testedInstance;
@@ -47,6 +49,8 @@ public class UserPopulatorTest {
 
         assertEquals(USER_NAME, userData.getName());
         assertEquals(USER_EMAIL, userData.getEmail());
+        assertEquals(PASSWORD, userData.getPassword());
+        assertEquals(Role.USER, userData.getRole());
         assertEquals(List.of(accountData), userData.getAccounts());
     }
 
@@ -54,7 +58,9 @@ public class UserPopulatorTest {
         when(user.getCode()).thenReturn(USER_CODE);
         when(user.getName()).thenReturn(USER_NAME);
         when(user.getEmail()).thenReturn(USER_EMAIL);
+        when(user.getPassword()).thenReturn(PASSWORD);
         when(user.getAccounts()).thenReturn(List.of(account));
+        when(user.getRole()).thenReturn(Role.USER);
         when(accountsConverter.convertAll(List.of(account))).thenReturn(List.of(accountData));
     }
 }

@@ -5,9 +5,9 @@ import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.auth.facade.data.factory.AuthDataFactory;
 import com.alexbro.onlinebank.auth.model.service.AuthService;
 import com.alexbro.onlinebank.auth.exception.AuthException;
-import com.alexbro.onlinebank.core.entity.User;
+import com.alexbro.onlinebank.core.entity.Principal;
 import com.alexbro.onlinebank.core.service.encode.password.EncodePasswordService;
-import com.alexbro.onlinebank.core.service.user.UserService;
+import com.alexbro.onlinebank.core.service.principal.PrincipalService;
 import com.alexbro.onlinebank.auth.model.service.AuthTokenService;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +18,7 @@ import java.util.Optional;
 public class DefaultAuthFacade implements AuthFacade {
 
     @Resource
-    private UserService userService;
+    private PrincipalService principalService;
 
     @Resource
     private AuthService authService;
@@ -34,29 +34,29 @@ public class DefaultAuthFacade implements AuthFacade {
 
     @Override
     public AuthData authorize(String username, String password) {
-        Optional<User> user = userService.findByUsername(username);
-        return user.filter(u -> isUserValid(u, password))
+        Optional<Principal> principle = principalService.findByUsername(username);
+        return principle.filter(p -> isUserValid(p, password))
                 .map(this::createAuthenticationData)
                 .orElseThrow(() -> new AuthException(AuthConstants.ERROR_MESSAGE));
     }
 
-    private boolean isUserValid(User user, String password) {
+    private boolean isUserValid(Principal principal, String password) {
         String encodedPassword = encodePasswordService.encodePassword(password);
-        return authService.passwordMatches(encodedPassword, user.getPassword());
+        return authService.passwordMatches(encodedPassword, principal.getPassword());
     }
 
-    private AuthData createAuthenticationData(User user) {
-        String token = authTokenService.generateToken(user.getUsername(),
-                user.getPassword());
-        return authDataFactory.create(user,
+    private AuthData createAuthenticationData(Principal principal) {
+        String token = authTokenService.generateToken(principal.getUsername(),
+                principal.getPassword());
+        return authDataFactory.create(principal,
                 token);
     }
 
     @Override
     public boolean isAuthorized(AuthData authData) {
       return Optional.ofNullable(authData)
-              .flatMap(ad -> userService.findByUsername(ad.getUsername()))
-              .map(u -> isTokensEqual(authData, u.getPassword()))
+              .flatMap(ad -> principalService.findByUsername(ad.getUsername()))
+              .map(p -> isTokensEqual(authData, p.getPassword()))
               .orElse(false);
     }
 
