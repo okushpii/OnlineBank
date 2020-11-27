@@ -40,8 +40,6 @@ public class DefaultAccountFacadeTest {
     private static final String ACCOUNT_TO_CODE = "a2";
     private static final Long CARD_NUMBER = 123345L;
     private static final Long CARD_NUMBER_TO = 232322L;
-    private static final String CURRENCY_FROM_NAME = "euro";
-    private static final String CURRENCY_TO_NAME = "dollar";
     private static Double SUM = 1000.0;
     private static BigDecimal SUM_AFTER = BigDecimal.valueOf(1000);
     private static BigDecimal CURRENT_RATE = BigDecimal.valueOf(1);
@@ -136,10 +134,10 @@ public class DefaultAccountFacadeTest {
     @Test
     public void shouldFindAllByCurrency() {
         List<AccountData> accounts = new ArrayList<>();
-        when(accountService.findAllByCurrency(CURRENCY_CODE)).thenReturn(List.of(account));
+        when(accountService.findAllByCurrency(CURRENCY_CODE, USER_CODE)).thenReturn(List.of(account));
         when(accountConverter.convertAll(List.of(account))).thenReturn(accounts);
 
-        List<AccountData> result = testedInstance.findAllByCurrency(CURRENCY_CODE);
+        List<AccountData> result = testedInstance.findAllByCurrency(CURRENCY_CODE, USER_CODE);
 
         assertEquals(accounts, result);
     }

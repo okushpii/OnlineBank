@@ -27,8 +27,8 @@ public class DefaultAccountService implements AccountService {
     }
 
     @Override
-    public List<Account> findAllByCurrency(String currencyCode) {
-        return accountDao.findAllByCurrency(currencyCode);
+    public List<Account> findAllByCurrency(String currencyCode, String userCode) {
+        return accountDao.findAllByCurrency(currencyCode, userCode);
     }
 
     @Override

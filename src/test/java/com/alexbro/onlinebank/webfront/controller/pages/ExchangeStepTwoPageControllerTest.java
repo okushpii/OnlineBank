@@ -19,7 +19,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,30 +52,29 @@ public class ExchangeStepTwoPageControllerTest {
     private HttpSession session;
     @Mock
     private I18Service i18Service;
-
     @Mock
     private Model model;
-
+    @Mock
     private UserData userData;
+    @Mock
     private AuthData authData;
+    @Mock
     private List<AccountData> accountsFrom;
+    @Mock
     private List<AccountData> accountsTo;
+    @Mock
     private CurrencyData currencyFrom;
+    @Mock
     private CurrencyData currencyTo;
 
     @Before
     public void setUp() {
-        authData = new AuthData();
-        authData.setUserCode(USER_CODE);
-        userData = new UserData();
-        accountsFrom = new ArrayList<>();
-        accountsTo = new ArrayList<>();
-        currencyFrom = new CurrencyData();
-        currencyTo = new CurrencyData();
+        when(authData.getUserCode()).thenReturn(USER_CODE);
+        when(userData.getCode()).thenReturn(USER_CODE);
         when(authManager.getAuthData(session)).thenReturn(authData);
         when(userFacade.findByCode(USER_CODE)).thenReturn(Optional.of(userData));
-        when(accountFacade.findAllByCurrency(CURRENCY_FROM_CODE)).thenReturn(accountsFrom);
-        when(accountFacade.findAllByCurrency(CURRENCY_TO_CODE)).thenReturn(accountsTo);
+        when(accountFacade.findAllByCurrency(CURRENCY_FROM_CODE,USER_CODE)).thenReturn(accountsFrom);
+        when(accountFacade.findAllByCurrency(CURRENCY_TO_CODE, USER_CODE)).thenReturn(accountsTo);
         when(currencyFacade.findByCode(CURRENCY_FROM_CODE)).thenReturn(Optional.of(currencyFrom));
         when(currencyFacade.findByCode(CURRENCY_TO_CODE)).thenReturn(Optional.of(currencyTo));
         when(i18Service.getLocalizedValue("currencies.matches")).thenReturn(ERROR_MESSAGE);

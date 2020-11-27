@@ -1,5 +1,6 @@
 package com.alexbro.onlinebank.webfront.controller.pages;
 
+import com.alexbro.onlinebank.auth.exception.AuthException;
 import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.core.exception.AccountsOperationException;
 import com.alexbro.onlinebank.core.service.i18service.I18Service;
@@ -45,15 +46,19 @@ public class ExchangeStepTwoPageController {
                                          HttpSession session) {
         AuthData authData = authManager.getAuthData(session);
         userFacade.findByCode(authData.getUserCode()).ifPresent(u -> model.addAttribute(WebConstants.ModelAttributes.
-                ACCOUNTS_FROM, accountFacade.findAllByCurrency(currencyFromCode)));
+                ACCOUNTS_FROM, accountFacade.findAllByCurrency(currencyFromCode, u.getCode())));
         userFacade.findByCode(authData.getUserCode()).ifPresent(u -> model.addAttribute(WebConstants.ModelAttributes.
-                ACCOUNTS_TO, accountFacade.findAllByCurrency(currencyToCode)));
+                ACCOUNTS_TO, accountFacade.findAllByCurrency(currencyToCode, u.getCode())));
         addExchangeRequestData(model);
         try {
+            if (accountFacade.findAllByCurrency(currencyFromCode, authData.getUserCode()).isEmpty() ||
+                    accountFacade.findAllByCurrency(currencyToCode, authData.getUserCode()).isEmpty()) {
+                throw new AuthException(i18Service.getLocalizedValue(WebConstants.Messages.CURRENCY_IS_NOT_FOUND_MESSAGE));
+            }
             model.addAttribute(WebConstants.ModelAttributes.USER, userFacade.findByCode(authData.getUserCode()).orElseThrow());
             addCurrencies(model, currencyFromCode, currencyToCode);
             return WebConstants.Pages.EXCHANGE_STEP_TWO;
-        } catch (AccountsOperationException e) {
+        } catch (AccountsOperationException | AuthException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             LOG.info(e.getMessage(), e);
             return WebConstants.Util.REDIRECT + WebConstants.Mapping.EXCHANGE_STEP_ONE;

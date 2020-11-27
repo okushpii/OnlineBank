@@ -10,7 +10,7 @@ public interface AccountFacade {
 
     void transfer(String accountCode, Long cardNumber, Double sum);
 
-    List<AccountData> findAllByCurrency(String currencyCode);
+    List<AccountData> findAllByCurrency(String currencyCode, String userCode);
 
     Optional<AccountData> findByCode(String code);
 

@@ -13,7 +13,8 @@ public class DefaultAccountDao implements AccountDao {
 
     private static final String GET_ACCOUNT_BY_CODE_QUERY = "SELECT a FROM Account a WHERE a.code = :code";
     private static final String GET_ACCOUNT_BY_CARD_NUMBER_QUERY = "SELECT a FROM Account a WHERE a.cardNumber = :cardNumber";
-    private static final String FIND_ALL_BY_CURRENCY_QUERY = "SELECT a FROM Account a INNER JOIN a.currency c WHERE c.code =:currencyCode";
+    private static final String FIND_ALL_BY_CURRENCY_QUERY = "SELECT a FROM Account a INNER JOIN a.currency c ON c.code =:currencyCode " +
+            "WHERE a.user.code = :userCode";
 
     @Resource
     private SessionProvider sessionProvider;
@@ -37,8 +38,8 @@ public class DefaultAccountDao implements AccountDao {
     }
 
     @Override
-    public List<Account> findAllByCurrency(String currencyCode) {
+    public List<Account> findAllByCurrency(String currencyCode, String userCode) {
         return sessionProvider.getSession().createQuery(FIND_ALL_BY_CURRENCY_QUERY, Account.class).
-                setParameter("currencyCode", currencyCode).list();
+                setParameter("currencyCode", currencyCode).setParameter("userCode", userCode).list();
     }
 }

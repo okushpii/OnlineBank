@@ -11,4 +11,6 @@ public interface UserService {
     Optional<User> findByCode(String code);
 
     void register(User user);
+
+    Optional<User> findByAccount(String accountCode);
 }

@@ -13,5 +13,5 @@ public interface AccountDao {
 
     void update(Account account);
 
-    List<Account> findAllByCurrency(String currencyCode);
+    List<Account> findAllByCurrency(String currencyCode, String userCode);
 }

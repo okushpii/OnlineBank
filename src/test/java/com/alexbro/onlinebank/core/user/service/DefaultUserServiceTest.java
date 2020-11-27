@@ -20,6 +20,7 @@ public class DefaultUserServiceTest {
 
     private static final String USER_LOGIN = "login";
     private static final String USER_CODE = "u1";
+    private static final String ACCOUNT_CODE = "a1";
 
     @InjectMocks
     private DefaultUserService testedEntry;
@@ -50,10 +51,17 @@ public class DefaultUserServiceTest {
 
     @Test
     public void shouldRegister() {
-        User user = new User();
-
         testedEntry.register(user);
 
         verify(userDao).register(user);
+    }
+
+    @Test
+    public void shouldFindByAccount() {
+        when(userDao.findByAccount(ACCOUNT_CODE)).thenReturn(Optional.of(user));
+
+        Optional<User> result = testedEntry.findByAccount(ACCOUNT_CODE);
+
+        assertEquals(Optional.of(user), result);
     }
 }
