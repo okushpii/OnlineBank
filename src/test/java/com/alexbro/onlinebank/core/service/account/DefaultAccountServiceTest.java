@@ -21,6 +21,7 @@ import static org.mockito.Mockito.when;
 public class DefaultAccountServiceTest {
 
     private static final String ACCOUNT_CODE = "a1";
+    private static final String USER_CODE = "u1";
     private static final Long CARD_NUMBER = 123345L;
     private static final String CURRENCY_CODE = "c1";
     private static final BigDecimal SUM = BigDecimal.valueOf(500);
@@ -47,7 +48,7 @@ public class DefaultAccountServiceTest {
     public void setUp() {
         when(accountDao.findByCode(ACCOUNT_CODE)).thenReturn(Optional.of(account));
         when(accountDao.findByCardNumber(CARD_NUMBER)).thenReturn(Optional.of(account));
-        when(accountDao.findAllByCurrency(CURRENCY_CODE)).thenReturn(List.of(account));
+        when(accountDao.findAllByCurrency(CURRENCY_CODE, USER_CODE)).thenReturn(List.of(account));
         when(accountFrom.getMoney()).thenReturn(ACCOUNT_FROM_MONEY);
         when(accountTo.getMoney()).thenReturn(ACCOUNT_TO_MONEY);
     }
@@ -68,7 +69,7 @@ public class DefaultAccountServiceTest {
 
     @Test
     public void shouldFindAllByCurrency() {
-        List<Account> result = testedEntry.findAllByCurrency(CURRENCY_CODE);
+        List<Account> result = testedEntry.findAllByCurrency(CURRENCY_CODE, USER_CODE);
 
         assertEquals(List.of(account), result);
     }

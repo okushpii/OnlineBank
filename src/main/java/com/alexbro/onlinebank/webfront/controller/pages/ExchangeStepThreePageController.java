@@ -1,11 +1,15 @@
 package com.alexbro.onlinebank.webfront.controller.pages;
 
+import com.alexbro.onlinebank.auth.exception.AuthException;
+import com.alexbro.onlinebank.auth.facade.AuthFacade;
 import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.core.exception.AccountsOperationException;
+import com.alexbro.onlinebank.core.service.i18service.I18Service;
 import com.alexbro.onlinebank.facade.account.AccountFacade;
 import com.alexbro.onlinebank.facade.data.account.AccountData;
 import com.alexbro.onlinebank.facade.data.exchange.ExchangeData;
 import com.alexbro.onlinebank.facade.data.exchange.ExchangeRequestData;
+import com.alexbro.onlinebank.facade.data.user.UserData;
 import com.alexbro.onlinebank.facade.user.UserFacade;
 import com.alexbro.onlinebank.webfront.WebConstants;
 import com.alexbro.onlinebank.webfront.controller.util.AuthManager;
@@ -33,6 +37,10 @@ public class ExchangeStepThreePageController {
     private UserFacade userFacade;
     @Resource
     private AuthManager authManager;
+    @Resource
+    private AuthFacade authFacade;
+    @Resource
+    private I18Service i18Service;
 
     private static final Logger LOG = LoggerFactory.getLogger(ExchangeStepTwoPageController.class);
 
@@ -55,12 +63,18 @@ public class ExchangeStepThreePageController {
         }
         try {
             ExchangeData exchangeData = accountFacade.getExchangeData(accountFrom, accountTo, exchangeRequestData.getSum());
+            UserData userFrom = userFacade.findByAccount(exchangeData.getAccountFrom().getCode()).
+                    orElseThrow(() -> new AuthException(i18Service.getLocalizedValue(WebConstants.Messages.ACCOUNT_IS_NOT_FOUND_MESSAGE)));
+            authFacade.isCurrentUser(authData.getUserCode(), userFrom.getCode());
+            UserData userTo = userFacade.findByAccount(exchangeData.getAccountTo().getCode()).
+                    orElseThrow(() -> new AuthException(i18Service.getLocalizedValue(WebConstants.Messages.ACCOUNT_IS_NOT_FOUND_MESSAGE)));
+            authFacade.isCurrentUser(authData.getUserCode(), userTo.getCode());
             userFacade.findByCode(authData.getUserCode()).ifPresent(u -> model.
                     addAttribute(WebConstants.ModelAttributes.EXCHANGE, exchangeData));
             model.addAttribute(WebConstants.ModelAttributes.USER, userFacade.findByCode(authData.getUserCode()).orElseThrow());
             addExchangeRequestData(model);
             return WebConstants.Pages.EXCHANGE_STEP_THREE;
-        } catch (AccountsOperationException e) {
+        } catch (AccountsOperationException | AuthException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             LOG.info(e.getMessage(), e);
             return WebConstants.Util.REDIRECT + WebConstants.Mapping.EXCHANGE_STEP_TWO + "?currencyFromCode=" +

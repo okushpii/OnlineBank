@@ -6,9 +6,12 @@ import com.alexbro.onlinebank.auth.facade.data.factory.AuthDataFactory;
 import com.alexbro.onlinebank.auth.model.service.AuthService;
 import com.alexbro.onlinebank.auth.exception.AuthException;
 import com.alexbro.onlinebank.core.entity.Principal;
+import com.alexbro.onlinebank.core.exception.AccountsOperationException;
 import com.alexbro.onlinebank.core.service.encode.password.EncodePasswordService;
+import com.alexbro.onlinebank.core.service.i18service.I18Service;
 import com.alexbro.onlinebank.core.service.principal.PrincipalService;
 import com.alexbro.onlinebank.auth.model.service.AuthTokenService;
+import com.alexbro.onlinebank.facade.FacadeConstants;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -19,18 +22,16 @@ public class DefaultAuthFacade implements AuthFacade {
 
     @Resource
     private PrincipalService principalService;
-
     @Resource
     private AuthService authService;
-
     @Resource
     private AuthTokenService authTokenService;
-
     @Resource
     private AuthDataFactory authDataFactory;
-
     @Resource
     private EncodePasswordService encodePasswordService;
+    @Resource
+    private I18Service i18Service;
 
     @Override
     public AuthData authorize(String username, String password) {
@@ -54,13 +55,20 @@ public class DefaultAuthFacade implements AuthFacade {
 
     @Override
     public boolean isAuthorized(AuthData authData) {
-      return Optional.ofNullable(authData)
-              .flatMap(ad -> principalService.findByUsername(ad.getUsername()))
-              .map(p -> isTokensEqual(authData, p.getPassword()))
-              .orElse(false);
+        return Optional.ofNullable(authData)
+                .flatMap(ad -> principalService.findByUsername(ad.getUsername()))
+                .map(p -> isTokensEqual(authData, p.getPassword()))
+                .orElse(false);
     }
 
-    private boolean isTokensEqual(AuthData authData, String password){
+    @Override
+    public void isCurrentUser(String authCode, String userCode) {
+        if (!authCode.equals(userCode)) {
+            throw new AuthException(i18Service.getLocalizedValue(AuthConstants.ACCOUNT_IS_NOT_FOUND_MESSAGE));
+        }
+    }
+
+    private boolean isTokensEqual(AuthData authData, String password) {
         String generateToken = authTokenService.generateToken(authData.getUsername(), password);
         return authData.getToken().equals(generateToken);
     }

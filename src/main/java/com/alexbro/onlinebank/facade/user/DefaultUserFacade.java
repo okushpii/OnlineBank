@@ -31,4 +31,9 @@ public class DefaultUserFacade implements UserFacade {
     public void register(RegisterData registerData) {
         userService.register(registerConverter.convert(registerData));
     }
+
+    @Override
+    public Optional<UserData> findByAccount(String accountCode) {
+        return userService.findByAccount(accountCode).map(u -> userConverter.convert(u));
+    }
 }

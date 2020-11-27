@@ -9,10 +9,11 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Repository
-public class DefaultUserDao implements UserDao{
+public class DefaultUserDao implements UserDao {
 
-    private static final String GET_USER_BY_USERNAME_QUERY ="SELECT u FROM User u WHERE u.username = :username";
-    private static final String GET_USER_BY_ID_QUERY ="SELECT u FROM User u WHERE u.code = :code";
+    private static final String GET_USER_BY_USERNAME_QUERY = "SELECT u FROM User u WHERE u.username = :username";
+    private static final String GET_USER_BY_ID_QUERY = "SELECT u FROM User u WHERE u.code = :code";
+    private static final String GET_USER_BY_ACCOUNT = "SELECT u FROM User u INNER JOIN u.accounts a WHERE a.code = :accountCode";
 
     @Resource
     private SessionProvider sessionProvider;
@@ -33,5 +34,11 @@ public class DefaultUserDao implements UserDao{
     @Override
     public void register(User user) {
         sessionProvider.getSession().save(user);
+    }
+
+    @Override
+    public Optional<User> findByAccount(String accountCode) {
+        return sessionProvider.getSession().createQuery(GET_USER_BY_ACCOUNT, User.class).
+                setParameter("accountCode", accountCode).uniqueResultOptional();
     }
 }

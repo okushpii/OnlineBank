@@ -68,8 +68,8 @@ public class DefaultAccountFacade implements AccountFacade {
     }
 
     @Override
-    public List<AccountData> findAllByCurrency(String currencyCode) {
-        return accountConverter.convertAll(accountService.findAllByCurrency(currencyCode));
+    public List<AccountData> findAllByCurrency(String currencyCode, String userCode) {
+        return accountConverter.convertAll(accountService.findAllByCurrency(currencyCode, userCode));
     }
 
     @Override

@@ -21,22 +21,20 @@ import static org.mockito.Mockito.when;
 public class DefaultUserFacadeTest {
 
     private static final String USER_CODE = "u1";
+    private static final String ACCOUNT_CODE = "a1";
 
     @InjectMocks
     private DefaultUserFacade testedEntry;
-
     @Mock
     private UserService userService;
-
     @Mock
     private Converter<User, UserData> userConverter;
-
     @Mock
     private User user;
-
+    @Mock
+    private UserData userData;
     @Mock
     private RegisterData registerData;
-
     @Mock
     private Converter<RegisterData, User> registerConverter;
 
@@ -53,11 +51,20 @@ public class DefaultUserFacadeTest {
 
     @Test
     public void shouldRegister() {
-        User user = new User();
         when(registerConverter.convert(registerData)).thenReturn(user);
 
         testedEntry.register(registerData);
 
         verify(userService).register(user);
+    }
+
+    @Test
+    public void shouldFindByAccount() {
+        when(userService.findByAccount(ACCOUNT_CODE)).thenReturn(Optional.of(user));
+        when(userConverter.convert(user)).thenReturn(userData);
+
+        Optional<UserData> result = testedEntry.findByAccount(ACCOUNT_CODE);
+
+        assertEquals(Optional.of(userData), result);
     }
 }

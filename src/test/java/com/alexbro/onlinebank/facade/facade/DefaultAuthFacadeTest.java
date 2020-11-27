@@ -1,5 +1,6 @@
 package com.alexbro.onlinebank.facade.facade;
 
+import com.alexbro.onlinebank.auth.exception.AuthException;
 import com.alexbro.onlinebank.core.entity.Principal;
 import com.alexbro.onlinebank.auth.model.service.AuthService;
 import com.alexbro.onlinebank.core.service.encode.password.EncodePasswordService;
@@ -7,6 +8,7 @@ import com.alexbro.onlinebank.auth.model.service.AuthTokenService;
 import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.auth.facade.data.factory.AuthDataFactory;
 import com.alexbro.onlinebank.auth.facade.DefaultAuthFacade;
+import com.alexbro.onlinebank.core.service.i18service.I18Service;
 import com.alexbro.onlinebank.core.service.principal.PrincipalService;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,6 +32,7 @@ public class DefaultAuthFacadeTest {
     private static final String ENCODED_USER_PASSWORD = "oj23i1j23uij1";
     private static final String AUTHENTICATION_TOKEN = "21312eedw";
     private static final String INCORRECT_AUTHENTICATION_TOKEN = "dsad23231";
+    private static final String ERROR_MESSAGE = "Account is not found";
 
     @InjectMocks
     private DefaultAuthFacade testedEntry;
@@ -48,6 +51,8 @@ public class DefaultAuthFacadeTest {
     private Principal principal;
     @Mock
     private AuthData authData;
+    @Mock
+    private I18Service i18Service;
 
     @Before
     public void setUp() {
@@ -70,14 +75,14 @@ public class DefaultAuthFacadeTest {
         assertEquals(authData, result);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = AuthException.class)
     public void shouldAuthoriseWhenUserIsEmpty() {
         when(principalService.findByUsername(USER_NAME)).thenReturn(Optional.empty());
 
         testedEntry.authorize(USER_NAME, NOT_ENCODED_USER_PASSWORD);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = AuthException.class)
     public void shouldAuthoriseWhenPasswordsAreNotEquals() {
         testedEntry.authorize(USER_NAME, NOT_ENCODED_USER_PASSWORD);
     }
@@ -103,5 +108,17 @@ public class DefaultAuthFacadeTest {
         boolean result = testedEntry.isAuthorized(authData);
 
         assertFalse(result);
+    }
+
+    @Test
+    public void shouldIsCurrentUser() {
+        testedEntry.isCurrentUser("u1", "u1");
+    }
+
+    @Test(expected = AuthException.class)
+    public void shouldIsNotCurrentUser() {
+        when(i18Service.getLocalizedValue("account.is.not.found.message")).thenReturn(ERROR_MESSAGE);
+
+        testedEntry.isCurrentUser("u1", "u2");
     }
 }

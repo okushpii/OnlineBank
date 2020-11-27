@@ -1,5 +1,7 @@
 package com.alexbro.onlinebank.webfront.controller.pages;
 
+import com.alexbro.onlinebank.auth.exception.AuthException;
+import com.alexbro.onlinebank.auth.facade.AuthFacade;
 import com.alexbro.onlinebank.auth.facade.data.AuthData;
 import com.alexbro.onlinebank.core.exception.AccountsOperationException;
 import com.alexbro.onlinebank.facade.account.AccountFacade;
@@ -66,23 +68,32 @@ public class ExchangeStepThreePageControllerTest {
     @Mock
     private AuthManager authManager;
     @Mock
+    private AuthFacade authFacade;
+    @Mock
     private HttpSession session;
     @Mock
     private BindingResult bindingResult;
-
+    @Mock
+    private UserData userFrom;
+    @Mock
+    private UserData userTo;
+    @Mock
     private UserData userData;
+    @Mock
     private AuthData authData;
+    @Mock
     private ExchangeData exchangeData;
 
     @Before
     public void setUp() {
-        authData = new AuthData();
-        authData.setUserCode(USER_CODE);
-        userData = new UserData();
-        exchangeData = new ExchangeData();
+        when(authData.getUserCode()).thenReturn(USER_CODE);
         when(authManager.getAuthData(session)).thenReturn(authData);
         when(userFacade.findByCode(USER_CODE)).thenReturn(Optional.of(userData));
         when(accountFacade.getExchangeData(accountFrom, accountTo, SUM)).thenReturn(exchangeData);
+        when(exchangeData.getAccountFrom()).thenReturn(accountFrom);
+        when(exchangeData.getAccountTo()).thenReturn(accountTo);
+        when(accountFrom.getCode()).thenReturn(ACCOUNT_FROM_CODE);
+        when(accountTo.getCode()).thenReturn(ACCOUNT_TO_CODE);
         when(accountFacade.findByCode(ACCOUNT_FROM_CODE)).thenReturn(Optional.of(accountFrom));
         when(accountFacade.findByCode(ACCOUNT_TO_CODE)).thenReturn(Optional.of(accountTo));
         when(exchangeRequestData.getAccountFromCode()).thenReturn(ACCOUNT_FROM_CODE);
@@ -93,12 +104,16 @@ public class ExchangeStepThreePageControllerTest {
         when(currencyFrom.getCode()).thenReturn(CURRENCY_FROM_CODE);
         when(currencyTo.getCode()).thenReturn(CURRENCY_TO_CODE);
         when(bindingResult.hasErrors()).thenReturn(false);
+        when(userFacade.findByAccount(ACCOUNT_FROM_CODE)).thenReturn(Optional.of(userFrom));
+        when(userFacade.findByAccount(ACCOUNT_TO_CODE)).thenReturn(Optional.of(userTo));
+        when(userFrom.getCode()).thenReturn(USER_CODE);
     }
 
     @Test
     public void shouldGetExchangeStepThreePage() {
         String result = testedInstance.getExchangeStepThreePage(exchangeRequestData, bindingResult, model, redirectAttributes, session);
 
+        verify(authFacade).isCurrentUser(USER_CODE, USER_CODE);
         verify(model).addAttribute("exchange", exchangeData);
         assertEquals(EXCHANGE_STEP_THREE_PAGE, result);
     }
@@ -127,5 +142,17 @@ public class ExchangeStepThreePageControllerTest {
         verify(redirectAttributes).addFlashAttribute(EXCHANGE_BINDING_RESULT, bindingResult);
         verify(redirectAttributes).addFlashAttribute(EXCHANGE_REQUEST_DATA, exchangeRequestData);
         Assertions.assertEquals(expected, result);
+    }
+
+    @Test
+    public void shouldGetExchangeStepThreePageWhenThrowAuthException() {
+        String expected = REDIRECT_TO_EXCHANGE_STEP_TWO_PAGE + "?currencyFromCode=" + CURRENCY_FROM_CODE +
+                "&currencyToCode=" + CURRENCY_TO_CODE;
+        when(userFacade.findByAccount(ACCOUNT_FROM_CODE)).thenThrow(new AuthException(ERROR_MESSAGE));
+
+        String result = testedInstance.getExchangeStepThreePage(exchangeRequestData, bindingResult, model, redirectAttributes, session);
+
+        verify(redirectAttributes).addFlashAttribute("error", ERROR_MESSAGE);
+        assertEquals(expected, result);
     }
 }

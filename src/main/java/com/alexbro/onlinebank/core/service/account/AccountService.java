@@ -12,7 +12,7 @@ public interface AccountService {
 
     Optional<Account> findByCardNumber(Long cardNumber);
 
-    List<Account> findAllByCurrency(String currencyCode);
+    List<Account> findAllByCurrency(String currencyCode, String userCode);
 
     void transfer(Account from, Account to, BigDecimal sum);
 

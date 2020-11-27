@@ -27,4 +27,9 @@ public class DefaultUserService implements UserService {
     public void register(User user) {
         userDao.register(user);
     }
+
+    @Override
+    public Optional<User> findByAccount(String accountCode) {
+        return userDao.findByAccount(accountCode);
+    }
 }
